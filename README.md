@@ -21,27 +21,28 @@ These tickets will be visible in a JIRA style layout for a support user to view.
 ## Dataset
 The model will be trained on the following dataset: https://www.kaggle.com/datasets/suraj520/customer-support-ticket-dataset/data
 
-SmartSupportAPI
-	The SmartSupportAPI will act as the middle man between the clients, the server and the machine learning model.
-	This will be an ASP.NET Core Web API application
-		Things I need to learn:
-			- Networking protocols
-			- ASP.NET Core
+## Learning Objectives
+Client (Blazor)
+- Implement Microsoft Identity for authentication
 
-Client
-	The Client will allow customers to enter a new support ticket (and potentially view their existing tickets), it will also allow authorised support workers to view and edit existing support tickets
-	This will be a .NET 9 Blazor Application
-		Things I need to learn:
-			- Microsoft Authentication
+API (ASP.NET Core)
+- Build RESTful endpoints
+- Handle ML model integration
+- Secure endpoints and validate inputs
 
-Database
-	The database will store the support tickets for the application
-	This will be a PostgreSQL database
-		Things I need to learn:
-			- PostgreSQL
+Database (PostgreSQL)
+- Design ticket schema
+- Perform CRUD operations
+- Use migration and versioning
 
-ML Model
-	This model is what will be used to predict the priority of a ticket given it's description
-	
-		Things I need to learn:
-			- Training and Deploying a working model
+Machine Learning
+- Train a priority classifier using ticket data.
+- Evaluate model performance (F1 Score)
+- Deploy the model for real-time inference
+
+## Future enhancements
+- Manual override of predicted priorities
+- JIRA-style kanban board with drag-and-drop
+- Ticket status tracking (open, in progress, resolved)
+- Notifications or email alerts for high-priority tickets
+- Role-based access control(admin, support, customer)
