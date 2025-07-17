@@ -6,16 +6,20 @@ It integrates a client application, a web API, and a machine learning model to s
 A user will fill out a form to enter a support ticket, the model will then predict the priority of that ticket and apply it.
 These tickets will be visible in a JIRA style layout for a support user to view.
 
-The goal of this project is not to get the ML model 100% correct, it's to get an fairly accurate model that I can then deploy
-and query for ticket priorities.
+## Project Goals
+- Build an end-to-end support ticketing system with ML-assisted priority classification.
+- Integrate machine learning into a .NET application stack.
+- Focus on practical deployment and usability over perfect predicition accuracy.
 
-User Workflow
+## User Workflow
 	- A customer submits a support ticket via the Blazor client
 	- The API forwards the ticket's description to the model
 	- The model returns a prediction of the ticket's priority
 	- The API then stores this ticket in the database.
 	- Authorized users can view and manage tickets via the client interface.
 
+## Dataset
+The model will be trained on the following dataset: https://www.kaggle.com/datasets/suraj520/customer-support-ticket-dataset/data
 
 SmartSupportAPI
 	The SmartSupportAPI will act as the middle man between the clients, the server and the machine learning model.
@@ -38,6 +42,6 @@ Database
 
 ML Model
 	This model is what will be used to predict the priority of a ticket given it's description
-	It will be trained on the following dataset: https://www.kaggle.com/datasets/suraj520/customer-support-ticket-dataset/data
+	
 		Things I need to learn:
 			- Training and Deploying a working model
