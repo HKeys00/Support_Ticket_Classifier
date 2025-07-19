@@ -1,6 +1,0 @@
-@SmartSupportAPI_HostAddress = http://localhost:5188
-
-GET {{SmartSupportAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

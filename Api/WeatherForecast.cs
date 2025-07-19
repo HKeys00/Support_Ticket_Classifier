@@ -1,4 +1,4 @@
-namespace SmartSupportAPI
+namespace Api
 {
     public class WeatherForecast
     {
