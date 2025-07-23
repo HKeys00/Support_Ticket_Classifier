@@ -1,10 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shared.Attributes;
+using System.ComponentModel.DataAnnotations;
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+                                //Disabling this as this class is only used as an Entity Framework model, but visual studio doesn't seem to be able to detect that across projects.
 namespace Shared.Models
 {
     /// <summary>
     /// Represents a customer entity in the database.
     /// Contains basic customer information.
     /// </summary>
+    [ObjectPrefix(nameof(Customer))]
     public class Customer
     {
         /// <summary>
@@ -30,3 +35,4 @@ namespace Shared.Models
         public int Age { get; set; }
     }
 }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
