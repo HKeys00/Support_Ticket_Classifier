@@ -57,10 +57,10 @@ namespace Api.Controllers
         /// <returns>A list of tickets.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<List<Ticket>> GetAllTickets()
         {
-            return new List<Ticket>();
+            var tickets = _context.Tickets.ToList();
+            return Ok(tickets);
         }
 
         #endregion
