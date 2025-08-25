@@ -6,5 +6,9 @@
     /// </summary>
     public enum TicketChannel
     {
+        SocialMedia = 0,
+        Chat = 1,
+        Email = 2,
+        Phone = 3,
     }
 }

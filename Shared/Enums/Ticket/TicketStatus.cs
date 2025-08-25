@@ -7,5 +7,8 @@
     /// </summary>
     public enum TicketStatus
     {
+        Open = 0,
+        PendingCustomerResponse = 1,
+        Closed = 2,        
     }
 }

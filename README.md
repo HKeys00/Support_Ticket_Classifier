@@ -42,6 +42,7 @@ Machine Learning
 
 ## Future enhancements
 - Manual override of predicted priorities
+- Search for tickets
 - JIRA-style kanban board with drag-and-drop
 - Ticket status tracking (open, in progress, resolved)
 - Notifications or email alerts for high-priority tickets

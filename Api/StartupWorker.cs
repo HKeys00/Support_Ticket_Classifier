@@ -65,10 +65,8 @@ namespace Api
                 var fields = parser.ReadFields();
                 if (fields == null) continue;
 
-                var ticket = CsvReader.Parse<Ticket>(fields, headers);
+                //var ticket = CsvReader.Parse<Ticket>(fields, headers);
             }
-
-            var m = 0;
         }
 
         #endregion
