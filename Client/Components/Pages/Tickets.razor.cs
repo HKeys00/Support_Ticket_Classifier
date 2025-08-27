@@ -30,7 +30,7 @@ namespace Client.Components.Pages
         {
             _tickets = new List<Ticket>();
 
-            var client = ClientFactory.CreateClient("Api");
+            using var client = ClientFactory.CreateClient("Api");
 
             var response = await client.GetFromJsonAsync<List<Ticket>>("ticket") ;
             if (response != null)

@@ -1,0 +1,13 @@
+﻿.ticket-container {
+    width: 90%;
+    min-height: 20%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 10px;
+}
+
+.ticket-container h5 {
+    font-size: 15px;
+    font-weight: bold;
+}

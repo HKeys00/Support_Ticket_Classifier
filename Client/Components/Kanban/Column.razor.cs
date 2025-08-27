@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.ComponentModel.DataAnnotations;
 
 namespace Client.Components.Kanban
 {
@@ -14,7 +13,6 @@ namespace Client.Components.Kanban
 
         #endregion
 
-
         #region Properties
 
         /// <summary>
@@ -22,6 +20,22 @@ namespace Client.Components.Kanban
         /// </summary>
         [Parameter]
         public required string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of tickets for the column
+        /// </summary>
+        [Parameter]
+        public required List<Shared.Models.Ticket> Tickets { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        /// <inheritdoc />
+        protected override void OnInitialized()
+        {
+            _ticketCount = Tickets.Count;
+        }
 
         #endregion
     }

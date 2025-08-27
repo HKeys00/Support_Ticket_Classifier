@@ -3,6 +3,11 @@
         <p class="column-name">@Name</p>
         <p class="column-ticket-count">@_ticketCount</p>
     </div>
-    <div class="ticket-container">
+    <div class="tickets">
+        @foreach(var t in Tickets) 
+        {
+            var ticket = t;
+            <Ticket @bind-Data="ticket"/>
+        }
     </div>
 </div>
