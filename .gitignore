@@ -421,3 +421,4 @@ chromium/
 *.sqlite3-shm
 
 .env
+.venv/
