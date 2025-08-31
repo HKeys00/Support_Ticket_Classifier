@@ -37,8 +37,8 @@ Database (PostgreSQL)
 
 Machine Learning
 - Train a priority classifier using ticket data.
-- Evaluate model performance (F1 Score)
-- Deploy the model for real-time inference
+- Evaluate model performance.
+- Deploy the model for real-time inference using Flask.
 
 ## Future enhancements
 - Manual override of predicted priorities
