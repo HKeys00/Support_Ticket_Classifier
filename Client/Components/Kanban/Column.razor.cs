@@ -22,10 +22,16 @@ namespace Client.Components.Kanban
         public required string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of tickets for the column
+        /// Gets or sets the list of tickets for the column.
         /// </summary>
         [Parameter]
         public required List<Shared.Models.Ticket> Tickets { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether or not tickets can be added to this column.
+        /// </summary>
+        [Parameter]
+        public bool CanAddTickets { get; set; }
 
         #endregion
 
