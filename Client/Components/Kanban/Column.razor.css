@@ -32,3 +32,28 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .column .column-footer {
+        width: 100%;
+        height: 10%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+    }
+
+.add-tickets {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #e1e5eb;
+}
+
+    .add-tickets p {
+        margin: 0;
+    }
+
+    

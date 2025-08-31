@@ -10,6 +10,8 @@ namespace Client.Components.Pages
         #region Fields
 
         private List<Ticket> _tickets;
+        private Ticket? _selectedTicket;
+        private Ticket? _newTicket;
 
         #endregion
 
@@ -36,6 +38,21 @@ namespace Client.Components.Pages
             if (response != null)
             {
                 _tickets = response;
+            }
+        }
+
+        /// <summary>
+        /// Adds a ticket to the database.
+        /// </summary>
+        /// <param name="ticket">The details of the new ticket.</param>
+        private async Task OnNewTicketAdded(Ticket ticket)
+        {
+            using var client = ClientFactory.CreateClient("Api");
+
+            var response = await client.PostAsJsonAsync("ticket", ticket);
+            if (response != null)
+            {
+                ticket.Id = 0;
             }
         }
 

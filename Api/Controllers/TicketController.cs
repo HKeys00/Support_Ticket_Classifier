@@ -1,6 +1,8 @@
 ﻿using Api.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Models;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -40,9 +42,9 @@ namespace Api.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Ticket> GetTicket(int id)
+        public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-            var ticket = _context.Tickets.FirstOrDefault(t => t.Id == id);
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
             if (ticket == null)
             {
                 return NotFound();
@@ -57,12 +59,32 @@ namespace Api.Controllers
         /// <returns>A list of tickets.</returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<List<Ticket>> GetAllTickets()
+        public async Task<ActionResult<List<Ticket>>> GetAllTickets()
         {
-            var tickets = _context.Tickets.ToList();
+            var tickets = await _context.Tickets.ToListAsync();
             return Ok(tickets);
         }
 
+        /// <summary>
+        /// Adds a new ticket to the database.
+        /// </summary>
+        /// <param name="ticket">The ticket details.</param>
+        /// <returns>The id of the newly created ticket.</returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<int>> CreateTicket([FromBody] Ticket ticket)
+        {
+            try
+            {
+                await _context.Tickets.AddAsync(ticket);
+                await _context.SaveChangesAsync();
+                return Ok(ticket.Id);
+            } catch
+            {
+                return BadRequest(-1);
+            }
+        }
         #endregion
     }
 }

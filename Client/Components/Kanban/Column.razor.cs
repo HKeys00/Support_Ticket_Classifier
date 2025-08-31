@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
+using Shared.Enums.Ticket;
 
 namespace Client.Components.Kanban
 {
@@ -10,6 +12,7 @@ namespace Client.Components.Kanban
         #region Fields
 
         private int _ticketCount;
+        private EventCallback<MouseEventArgs> _addTicketCallback;
 
         #endregion
 
@@ -33,6 +36,12 @@ namespace Client.Components.Kanban
         [Parameter]
         public bool CanAddTickets { get; set; }
 
+        /// <summary>
+        /// Gets or sets the event to call when a new ticket is added to the column.
+        /// </summary>
+        [Parameter]
+        public EventCallback<Shared.Models.Ticket> AddTicketsEvent { get; set; }
+
         #endregion
 
         #region Methods
@@ -41,6 +50,23 @@ namespace Client.Components.Kanban
         protected override void OnInitialized()
         {
             _ticketCount = Tickets.Count;
+        }
+
+        /// <summary>
+        /// Hanldes the on click even for the add ticket button.
+        /// </summary>
+        private async Task OnAddTicketClicked()
+        {
+            Shared.Models.Ticket ticket = new()
+            {
+                Subject = "New Ticket",
+                Description = string.Empty,
+                Type = TicketType.None,
+                Priority = TicketPriority.Low,
+                Status = TicketStatus.Open
+            };
+
+            await AddTicketsEvent.InvokeAsync(ticket);
         }
 
         #endregion

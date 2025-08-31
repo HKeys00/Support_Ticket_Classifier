@@ -7,10 +7,11 @@
     /// </summary>
     public enum TicketType
     {
-        BillingInquiry = 0,
-        CancellationRequest = 1,
-        ProductInquiry = 2,
-        RefundRequest = 3,
-        TechnicalIssue = 4
+        None = 0,
+        BillingInquiry = 1,
+        CancellationRequest = 2,
+        ProductInquiry = 3,
+        RefundRequest = 4,
+        TechnicalIssue = 5
     }
 }

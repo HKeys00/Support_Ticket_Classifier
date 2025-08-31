@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Shared.Models;
 
 namespace Client.Components.Kanban
 {

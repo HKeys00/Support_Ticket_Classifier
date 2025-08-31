@@ -1,4 +1,5 @@
 ﻿@page "/tickets"
+@rendermode InteractiveServer
 @using Client.Components.Kanban
 
 <div class="page">
@@ -7,12 +8,20 @@
     </div>
     <div class="body segment">
         <div class="column-container">
-            <Column Name="TO DO" Tickets="_tickets" CanAddTickets/>
-            <Column Name="IN PROGRESS" Tickets="_tickets"/>
-            <Column Name="IN QA" Tickets="_tickets"/>
-            <Column Name="DONE" Tickets="_tickets"/>
+            <Column Name="OPEN" Tickets="_tickets" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
+            <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="_tickets"/>
+            <Column Name="CLOSED" Tickets="_tickets"/>
         </div>
     </div>
     <div class="footer segment"></div>
 </div>
-@* <TicketDetails/> *@
+
+@if (_selectedTicket != null)
+{
+    <TicketDetails Ticket="_selectedTicket"/>
+}
+
+@if (_newTicket != null)
+{
+
+}

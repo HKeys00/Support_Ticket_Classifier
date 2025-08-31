@@ -10,9 +10,12 @@
             <Ticket @bind-Data="ticket"/>
         }
     </div>
-    @if(CanAddTickets){
-        <div class="add-tickets">
-            <p>+ Add Tickets</p>
-        </div>
-    }
+    <div class="column-footer">
+        @if (CanAddTickets)
+        {
+            <button type="button" class="add-tickets" @onclick="() => OnAddTicketClicked()">
+                <p>+ Create Ticket</p>
+            </button>
+        }
+    </div>
 </div>
