@@ -31,6 +31,13 @@ namespace Client.Components.Kanban
         #region Methods
 
         /// <inheritdoc />
+        protected override void OnInitialized()
+        {
+            _ticketPriorityIconPath = string.Empty;
+            _ticketTypeIconPath = string.Empty;
+        }
+
+        /// <inheritdoc />
         protected override void OnParametersSet()
         {
             _ticketTypeIconPath = $"images/ticket icons/{Data.Type}.png";
