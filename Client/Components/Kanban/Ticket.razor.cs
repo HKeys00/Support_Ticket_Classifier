@@ -7,7 +7,8 @@ namespace Client.Components.Kanban
     {
         #region Fields
 
-        private string _iconPath;
+        private string _ticketTypeIconPath;
+        private string _ticketPriorityIconPath;
 
         #endregion
 
@@ -32,7 +33,8 @@ namespace Client.Components.Kanban
         /// <inheritdoc />
         protected override void OnParametersSet()
         {
-            _iconPath = $"images/ticket icons/{Data.Type.ToString().ToLower()}.png";
+            _ticketTypeIconPath = $"images/ticket icons/{Data.Type}.png";
+            _ticketPriorityIconPath = $"images/ticket priority/{Data.Priority}.png";
         }
 
         #endregion

@@ -1,10 +1,14 @@
 ﻿<div class="ticket-container">
     <h5>@Data.Subject</h5>
     <div class="ticket-info">
-        <div>
-            <img src="@_iconPath"/>
+        <div class="half-container left-side">
+            <img class="ticket-type icon" src="@_ticketTypeIconPath"/>
+            <p>SUP-@Data.Id.ToString("00")</p>
         </div>
-        <div></div>
+        <div class="half-container right-side">
+            <img class="ticket-priority icon" src="@_ticketPriorityIconPath" />
+            <img class="ticket-assignee icon" src="images/profile.png"/>
+        </div>
     </div>
 </div>
 
