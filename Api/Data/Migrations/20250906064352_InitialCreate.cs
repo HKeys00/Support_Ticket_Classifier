@@ -18,8 +18,7 @@ namespace Api.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,11 +39,9 @@ namespace Api.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Channel = table.Column<int>(type: "int", nullable: false),
                     Priority = table.Column<int>(type: "int", nullable: false),
-                    FirstResponeTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     DateResolved = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Resolution = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CustomerRating = table.Column<int>(type: "int", nullable: true)
+                    Resolution = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

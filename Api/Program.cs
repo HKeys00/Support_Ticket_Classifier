@@ -38,4 +38,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+try
+{
+    app.Run();
+}
+catch
+{
+    var m = 100;
+}

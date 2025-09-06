@@ -1,5 +1,6 @@
 ﻿
 using Api.Data;
+using Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic.FileIO;
 using Shared.Helpers;
@@ -41,7 +42,14 @@ namespace Api
             var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             await context.Database.MigrateAsync(cancellationToken);
 
-            await SeedTicketData(context);
+            try
+            {
+                await SeedTicketData(context, cancellationToken);
+            } catch (Exception ex)
+            {
+                var m = ex;
+            }
+
         }
 
         /// <inheritdoc/>
@@ -51,7 +59,7 @@ namespace Api
 
         #region Methods
 
-        private async Task SeedTicketData(ApplicationDbContext context)
+        private async Task SeedTicketData(ApplicationDbContext context , CancellationToken cancellationToken)
         {
             using TextFieldParser parser = new TextFieldParser(Path.Combine(Directory.GetCurrentDirectory(), "Data\\customer_support_tickets.csv"));
             parser.TextFieldType = FieldType.Delimited;
@@ -59,13 +67,50 @@ namespace Api
             parser.HasFieldsEnclosedInQuotes = true;
 
             string[]? headers = parser.ReadFields();
-            
-            while(!parser.EndOfData)
+
+            Dictionary<string, Customer> customers = (await context.Customers.ToListAsync()).ToDictionary(c => c.Email, c => c);
+            while (!parser.EndOfData)
             {
                 var fields = parser.ReadFields();
-                if (fields == null) continue;
+                if (fields == null) break;
 
-                //var ticket = CsvReader.Parse<Ticket>(fields, headers);
+                var customerDto = CsvReader.Parse<CustomerDto>(fields, headers);    
+                var ticketDto = CsvReader.Parse<TicketDto>(fields, headers);
+
+                var customer = new Customer()
+                {
+                    Email = customerDto.CustomerEmail,
+                    Name = customerDto.CustomerName,
+                };
+
+                var ticket = new Ticket()
+                {
+                    ProductPurchased = ticketDto.ProductPurchased,
+                    DateOfPurchase = ticketDto.DateOfPurchase,
+                    Type = ticketDto.TicketType,
+                    Subject = ticketDto.TicketSubject,
+                    Description = ticketDto.TicketDescription,
+                    Channel = ticketDto.TicketChannel,
+                    Priority = ticketDto.TicketPriority,
+                    Status = ticketDto.TicketStatus,
+                    DateResolved = ticketDto.TimeToResolution,
+                    Resolution = ticketDto.Resolution
+                };
+
+                if (!customers.TryGetValue(customer.Email, out var c))
+                {
+                    context.Customers.Add(customer);
+                    customers.Add(customer.Email, customer);
+                }
+
+                ticket.Customer = customer;
+            }
+
+            try
+            {
+                await context.SaveChangesAsync(cancellationToken);
+            } catch(Exception ex) {
+                var m = ex;
             }
         }
 
