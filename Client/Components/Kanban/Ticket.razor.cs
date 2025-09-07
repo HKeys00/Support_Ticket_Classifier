@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Client.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace Client.Components.Kanban
 {
@@ -12,6 +13,13 @@ namespace Client.Components.Kanban
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the injected <see cref="CurrentTicketService"/> instance.
+        /// </summary>
+        [Inject]
+        public required CurrentTicketService CurrentTicketService { get; set; }
+
 
         /// <summary>
         /// Gets or sets the ticket data.
@@ -41,6 +49,14 @@ namespace Client.Components.Kanban
         {
             _ticketTypeIconPath = $"images/ticket icons/{Data.Type}.png";
             _ticketPriorityIconPath = $"images/ticket priority/{Data.Priority}.png";
+        }
+
+        /// <summary>
+        /// Event handler for when the ticket is clicked.
+        /// </summary>
+        public void OnTicketClicked()
+        {
+            CurrentTicketService.Id = Data.Id;
         }
 
         #endregion

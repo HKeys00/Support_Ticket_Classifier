@@ -1,15 +1,29 @@
-﻿<div class="overlay">
-    <div class="dialog">
-        <div class="header">
+﻿@using Client.Components.Common;
+
+<Dialog>
+    <div class="header">
+        <div class="row">
             <div class="ticket-type">
-                <img class="icon" src=""/>
-                <p>@Ticket.Id.ToString("00")</p>
+                <img class="icon" src="" />
+                <p>STC-@Ticket.Id.ToString("00")</p>
             </div>
             <div class="button-container">
-                <img class="button" src=""/>
+                <img class="button" src="" />
             </div>
         </div>
-        <div class="body"></div>
-        <div class="footer"></div>
+        <div class="row">
+            <h3>@Ticket.Subject</h3>
+            <div class="ticket-priority">
+                <img class="icon" src=" "/>
+            </div>
+        </div>
     </div>
-</div>
+    <div class="body">
+        <div class="customer-details">
+            <p>@Ticket.Customer.Name</p>
+            <p>@Ticket.Customer.Email</p>
+        </div>
+        <p>@Ticket.Description</p>
+    </div>
+</Dialog>
+        

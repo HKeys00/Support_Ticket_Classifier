@@ -12,10 +12,66 @@ namespace Shared.Helpers
     /// <summary>
     /// Custom CSV reader to handle complex parsing
     /// </summary>
-    /// <remarks>I obviously could've just made a data class that matches the excel csv so I can use a
-    /// library to parse the data, but that's boring.</remarks>
+    /// <remarks>
+    /// I obviously could've just made a data class that matches the excel csv so I can use a
+    /// library to parse the data, but that's boring.
+    /// 
+    /// ***UNFINISHED***
+    /// Because not relevant to the learning outcomes of this project,
+    /// keeping it around if I ever want to come back and finish it.
+    /// </remarks>
     public static class CsvReader
     {
+
+        /// <summary>
+        /// A much simpler parser designed to work with the DTO objects instead of trying to parse
+        /// directly into a database object.
+        /// </summary>
+        /// <typeparam name="T">The type to parse to.</typeparam>
+        /// <param name="fields">The csv data.</param>
+        /// <param name="headers">The headers.</param>
+        /// <returns>A serialized <typeparamref name="T"/></returns>
+        public static T Parse<T>(string[] fields, string[] headers) where T: new()
+        {
+            var result = new T();
+            if (fields.Length != headers.Length)
+            {
+                throw new ArgumentException("The length of fields and headers must match.");
+            }
+
+            for (int i = 0; i < headers.Length; i++)
+            {
+                string header = headers[i].Replace(" ", string.Empty).Trim();
+                object value = fields[i];
+
+                var property = typeof(T).GetProperty(header);
+                if (property == null)
+                {
+                    continue;
+                }
+
+                object? parsedEnum = null;
+                try
+                {
+                    Enum.TryParse(property.PropertyType, value.ToString()?.Replace(" ", string.Empty).Trim(), true, out parsedEnum);
+                } catch
+                {
+                }
+                 
+                if (parsedEnum != null)
+                {
+                    property.SetValue(result, parsedEnum, null);
+                    continue;
+                }
+
+                value = Convert.ChangeType(value, property.PropertyType);
+                property.SetValue(result, value);
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// Parses a line of a csv file.
         /// </summary>
@@ -23,7 +79,7 @@ namespace Shared.Helpers
         /// <param name="fields">The csv data.</param>
         /// <param name="headers">The headers.</param>
         /// <returns>A serialized <typeparamref name="T"/></returns>
-        public static T Parse<T>(string[] fields, string[] headers) where T: new() 
+        public static T ComplexParse<T>(string[] fields, string[] headers) where T: new() 
         {
             var result = new T();
             if (fields.Length != headers.Length)

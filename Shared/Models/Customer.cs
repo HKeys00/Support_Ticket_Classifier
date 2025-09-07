@@ -28,11 +28,6 @@ namespace Shared.Models
         /// </summary>
         [MaxLength(50)]        
         public string Email { get; set; }
-
-        /// <summary>
-        /// Gets or sets the customers age.
-        /// </summary>
-        public int Age { get; set; }
     }
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.

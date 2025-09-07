@@ -69,11 +69,6 @@ namespace Shared.Models
         public TicketPriority Priority { get; set; }
 
         /// <summary>
-        /// Gets or sets the time taken to provide the first response to the customer.
-        /// </summary>
-        public DateTime FirstResponeTime { get; set; } 
-
-        /// <summary>
         /// Gets or sets that current status of the ticket.
         /// </summary>
         public TicketStatus Status { get; set; }
@@ -88,13 +83,6 @@ namespace Shared.Models
         /// Gets or sets the resolution or solution provided for the ticket.
         /// </summary>
         public string? Resolution { get; set; }
-
-        /// <summary>
-        /// Gets or sets the customer's satisfaction rating for closed tickets (1-5).
-        /// </summary>
-        [ColumnName("CustomerSatisfactionRating")]
-        public int? CustomerRating { get; set; }
-
     }
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.

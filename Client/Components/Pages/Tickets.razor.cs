@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Client.Services;
+using Microsoft.AspNetCore.Components;
 using Shared.Models;
 namespace Client.Components.Pages
 {
@@ -18,6 +19,12 @@ namespace Client.Components.Pages
         #region Properties
 
         /// <summary>
+        /// Gets or sets the injected <see cref="CurrentTicketService"/> instance.
+        /// </summary>
+        [Inject]
+        public required CurrentTicketService CurrentTicketService { get; set; }
+
+        /// <summary>
         /// Gets or sets the injected <see cref="IHttpClientFactory"/>.
         /// </summary>
         [Inject]
@@ -30,6 +37,7 @@ namespace Client.Components.Pages
         /// <inheritdoc />
         protected override async Task OnInitializedAsync()
         {
+            CurrentTicketService.OnTicketChange += OnTicketSelected;
             _tickets = new List<Ticket>();
 
             using var client = ClientFactory.CreateClient("Api");
@@ -47,13 +55,24 @@ namespace Client.Components.Pages
         /// <param name="ticket">The details of the new ticket.</param>
         private async Task OnNewTicketAdded(Ticket ticket)
         {
-            using var client = ClientFactory.CreateClient("Api");
+            _newTicket = ticket;
+            //using var client = ClientFactory.CreateClient("Api");
 
-            var response = await client.PostAsJsonAsync("ticket", ticket);
-            if (response != null)
-            {
-                ticket.Id = 0;
-            }
+            //var response = await client.PostAsJsonAsync("ticket", ticket);
+            //if (response != null)
+            //{
+            //    ticket.Id = 0;
+            //}
+        }
+
+        /// <summary>
+        /// Handles an update to the currently selected ticket.
+        /// </summary>
+        /// <param name="id">The id of the selected ticket.</param>
+        private void OnTicketSelected(int? id)
+        {
+            _selectedTicket = _tickets.FirstOrDefault(t => t.Id == id);
+            StateHasChanged();
         }
 
         #endregion

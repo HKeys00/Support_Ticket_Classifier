@@ -2,13 +2,10 @@
 
 namespace Client.Components.Kanban
 {
-    public partial class TicketDetails
+    public partial class TicketForm
     {
         #region Properties
 
-        /// <summary>
-        /// Gets or sets the ticket data to display details for.
-        /// </summary>
         [Parameter]
         public required Shared.Models.Ticket Ticket { get; set; }
 

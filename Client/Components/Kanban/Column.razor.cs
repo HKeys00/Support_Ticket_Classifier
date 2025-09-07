@@ -12,7 +12,6 @@ namespace Client.Components.Kanban
         #region Fields
 
         private int _ticketCount;
-        private EventCallback<MouseEventArgs> _addTicketCallback;
 
         #endregion
 

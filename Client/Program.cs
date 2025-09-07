@@ -1,4 +1,5 @@
 using Client.Components;
+using Client.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddHttpClient("Api", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7063/");
 });
+builder.Services.AddScoped<CurrentTicketService>();
+
 
 var app = builder.Build();
 
