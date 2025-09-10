@@ -44,7 +44,7 @@ namespace Api
 
             try
             {
-                await SeedTicketData(context, cancellationToken);
+                //await SeedTicketData(context, cancellationToken);
             } catch (Exception ex)
             {
                 var m = ex;
@@ -106,12 +106,7 @@ namespace Api
                 ticket.Customer = customer;
             }
 
-            try
-            {
-                await context.SaveChangesAsync(cancellationToken);
-            } catch(Exception ex) {
-                var m = ex;
-            }
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         #endregion

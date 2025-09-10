@@ -1,8 +1,10 @@
-﻿<div class="overlay">
-    <div class="dialog">
-        @ChildContent
+﻿@if (IsVisible) {
+    <div class="overlay">
+        <div class="dialog">
+            @ChildContent
+        </div>
     </div>
-</div>
+}
 
 @code {
 
@@ -11,4 +13,10 @@
     /// </summary>
     [Parameter]
     public RenderFragment ChildContent { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether the dialog is visible.
+    /// </summary>
+    [Parameter]
+    public bool IsVisible { get; set; }
 }

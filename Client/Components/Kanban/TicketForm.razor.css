@@ -1,0 +1,105 @@
+﻿/* General form styling */
+form {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    border: 1px solid #dfe1e6;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(9, 30, 66, 0.15);
+    padding: 1.5rem 2rem;
+}
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #dfe1e6;
+        padding-bottom: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            color: #172b4d;
+        }
+
+        .header .button-container img.button {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+        }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1.25rem;
+        font-weight: 500;
+        color: #172b4d;
+    }
+
+::deep select {
+    width: 50%;
+    height: 40px;
+    background-color: #f4f5f8;
+}
+
+::deep input {
+    height: 40px;
+    background-color: #f4f5f8;
+    padding-inline: 5px;
+}
+
+::deep textarea {
+    height: 120px;
+    padding: 5px;
+}
+
+     .customer-details,
+     .ticket-details {
+        border: 1px solid #dfe1e6;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        background: #fafbfc;
+    }
+
+         .customer-details h5 {
+            margin-top: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #172b4d;
+        }
+
+    /* Footer (for submit button area) */
+     .footer {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 1rem;
+        border-top: 1px solid #dfe1e6;
+        gap: 10px;
+        font-size: 20px;
+    }
+
+         .footer .cancel {
+             background: white;
+             border: none;
+         }
+
+         .footer .submit {
+            background: #0052cc;
+            color: white;
+            font-weight: 500;
+            border: none;
+            border-radius: 4px;
+            padding: 0.55rem 1.25rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+             .footer .submit:hover {
+                background: #0065ff;
+            }

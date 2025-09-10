@@ -5,7 +5,7 @@ namespace Api.Models
     /// <summary>
     /// Data transfer object for reading the customer data from the excel spreadsheet.
     /// </summary>
-    public class CustomerDto
+    public record CustomerDto
     {
         /// <summary>
         /// Gets or sets the customers full name.

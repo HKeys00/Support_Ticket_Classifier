@@ -9,6 +9,10 @@
     padding: 10px;
 }
 
+    .ticket-container:hover{
+        cursor: pointer;
+    }
+
     .ticket-container h5 {
         font-size: 15px;
         font-weight: bold;

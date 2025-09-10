@@ -11,7 +11,9 @@ builder.Services.AddHttpClient("Api", client =>
 {
     client.BaseAddress = new Uri("https://localhost:7063/");
 });
+
 builder.Services.AddScoped<CurrentTicketService>();
+builder.Services.AddScoped<TicketService>();
 
 
 var app = builder.Build();

@@ -21,7 +21,4 @@
     <TicketDetails Ticket="_selectedTicket"/>
 }
 
-@if (_newTicket != null)
-{
-    <TicketForm Ticket="_newTicket"/>
-}
+<TicketForm @bind-IsVisible="_newTicketDialogShowing" />

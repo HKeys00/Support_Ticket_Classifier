@@ -6,7 +6,7 @@ namespace Api.Models
     /// <summary>
     /// Data transfer object for reading the data from the excel spreadsheet.
     /// </summary>
-    public class TicketDto
+    public record TicketDto
     {
         /// <summary>
         /// Gets or sets the unique identifier for the <see cref="Ticket"/>.

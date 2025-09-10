@@ -12,7 +12,8 @@ namespace Client.Components.Pages
 
         private List<Ticket> _tickets;
         private Ticket? _selectedTicket;
-        private Ticket? _newTicket;
+
+        private bool _newTicketDialogShowing;
 
         #endregion
 
@@ -25,11 +26,10 @@ namespace Client.Components.Pages
         public required CurrentTicketService CurrentTicketService { get; set; }
 
         /// <summary>
-        /// Gets or sets the injected <see cref="IHttpClientFactory"/>.
+        /// Gets or sets the injected <see cref="TicketService"/> instance.
         /// </summary>
         [Inject]
-        public required IHttpClientFactory ClientFactory { get; set; }
-
+        public required TicketService TicketService { get; set; }
         #endregion
 
         #region Methods
@@ -40,13 +40,7 @@ namespace Client.Components.Pages
             CurrentTicketService.OnTicketChange += OnTicketSelected;
             _tickets = new List<Ticket>();
 
-            using var client = ClientFactory.CreateClient("Api");
-
-            var response = await client.GetFromJsonAsync<List<Ticket>>("ticket") ;
-            if (response != null)
-            {
-                _tickets = response;
-            }
+            _tickets = await TicketService.GetTicketsAsync();
         }
 
         /// <summary>
@@ -55,7 +49,7 @@ namespace Client.Components.Pages
         /// <param name="ticket">The details of the new ticket.</param>
         private async Task OnNewTicketAdded(Ticket ticket)
         {
-            _newTicket = ticket;
+            _newTicketDialogShowing = true;
             //using var client = ClientFactory.CreateClient("Api");
 
             //var response = await client.PostAsJsonAsync("ticket", ticket);
