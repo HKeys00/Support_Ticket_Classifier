@@ -48,6 +48,16 @@ namespace Client.Services
             return tickets;
         }
 
+        /// <summary>
+        /// Posts a new ticket to the database.
+        /// </summary>
+        /// <param name="ticket">The ticket data.</param>
+        public async Task PostTicketAsync(Ticket ticket)
+        {
+            using var client = _clientFactory.CreateClient("Api");
+            var response = await client.PostAsJsonAsync<Ticket>("ticket", ticket);
+        }
+
         #endregion
     }
 }

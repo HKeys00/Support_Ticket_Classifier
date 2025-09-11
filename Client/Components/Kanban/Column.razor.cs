@@ -46,7 +46,7 @@ namespace Client.Components.Kanban
         #region Methods
 
         /// <inheritdoc />
-        protected override void OnInitialized()
+        protected override void OnParametersSet()
         {
             _ticketCount = Tickets.Count;
         }

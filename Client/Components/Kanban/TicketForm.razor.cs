@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Client.Services;
+using Microsoft.AspNetCore.Components;
 using Shared.Enums.Ticket;
 
 namespace Client.Components.Kanban
@@ -6,6 +7,12 @@ namespace Client.Components.Kanban
     public partial class TicketForm
     {
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the injected <see cref="TicketService"/> instance.
+        /// </summary>
+        [Inject]
+        public required TicketService TicketService { get; set; }
 
         /// <summary>
         /// Gets or sets the ticket model data to be supplied by the form.
@@ -47,9 +54,10 @@ namespace Client.Components.Kanban
         /// <summary>
         /// Submits the new ticket.
         /// </summary>
-        private void Submit()
+        private async void Submit()
         {
-
+            await TicketService.PostTicketAsync(Ticket);
+            await IsVisibleChanged.InvokeAsync(true);
         }
 
         /// <summary>
