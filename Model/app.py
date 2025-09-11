@@ -12,14 +12,10 @@ model = joblib.load('ticket_classifier_model.pkl')
 
 @app.route('/', methods=['GET'])
 def predict():
-    new_ticket = pd.DataFrame([{
-        "Date of Purchase": "2021-07-15",
-        "Ticket Type": "Refund request",
-        "Ticket Subject": "Login issue",
-        "Ticket Description": "I can't log in to my account after purchase",
-        "Ticket Channel": "Email"
-    }])
-
+    data = request.get_json(force=True)
+    print(data)
+    new_ticket = pd.DataFrame([data])
+    new_ticket = to_dense_transform(new_ticket)
     prediction = model.predict(new_ticket)
     
     return jsonify({

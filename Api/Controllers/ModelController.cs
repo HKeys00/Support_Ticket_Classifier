@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Data;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Shared.Models;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -8,7 +12,7 @@ namespace Api.Controllers
     /// </summary>
     [ApiController]
     [Route("model")]
-    public class ModelController
+    public class ModelController : ControllerBase
     {
         #region Fields
 
@@ -36,9 +40,21 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="ticket">The ticket data.</param>
         /// <returns>The prediction from the model as an int.</returns>
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<int>> GetPriorityPrediction([FromBody] Ticket ticket)
         {
+            try
+            {
+                var response = await _client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
+                var m = response;
+            } catch
+            {
 
+            }
+
+            return Ok(-1);
         }
 
         #endregion
