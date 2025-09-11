@@ -30,6 +30,7 @@ namespace Client.Components.Pages
         /// </summary>
         [Inject]
         public required TicketService TicketService { get; set; }
+
         #endregion
 
         #region Methods

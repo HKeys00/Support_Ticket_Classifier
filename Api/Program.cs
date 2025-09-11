@@ -33,16 +33,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
-try
-{
-    app.Run();
-}
-catch
-{
-    var m = 100;
-}
+app.Run();

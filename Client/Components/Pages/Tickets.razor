@@ -1,6 +1,7 @@
 ﻿@page "/tickets"
 @rendermode InteractiveServer
 @using Client.Components.Kanban
+@using Shared.Enums.Ticket
 
 <div class="page">
     <div class="header segment">
@@ -8,9 +9,17 @@
     </div>
     <div class="body segment">
         <div class="column-container">
-            <Column Name="OPEN" Tickets="_tickets" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
-            <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="_tickets"/>
-            <Column Name="CLOSED" Tickets="_tickets"/>
+
+            @{
+                var openTickets = _tickets.Where(t => t.Status == TicketStatus.Open).ToList();
+                var responeTickets = _tickets.Where(t => t.Status == TicketStatus.PendingCustomerResponse).ToList();
+                var closedTickets = _tickets.Where(t => t.Status == TicketStatus.Closed).ToList();
+            }
+
+
+            <Column Name="OPEN" Tickets="openTickets" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
+            <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="responeTickets"/>
+            <Column Name="CLOSED" Tickets="closedTickets"/>
         </div>
     </div>
     <div class="footer segment"></div>
