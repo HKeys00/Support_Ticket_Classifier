@@ -1,9 +1,5 @@
-﻿using Api.Data;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
-using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -16,7 +12,7 @@ namespace Api.Controllers
     {
         #region Fields
 
-        private readonly HttpClient _client;
+        private readonly IHttpClientFactory _clientFactory;
 
         #endregion
 
@@ -26,9 +22,9 @@ namespace Api.Controllers
         /// Initializes a new instance of the <see cref="ModelController"/> class.
         /// </summary>
         /// <param name="client"></param>
-        public ModelController(HttpClient client)
+        public ModelController(IHttpClientFactory clientFactory)
         {
-            _client = client;
+            _clientFactory = clientFactory;
         }
 
         #endregion
@@ -45,10 +41,12 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<int>> GetPriorityPrediction([FromBody] Ticket ticket)
         {
+            using var client = _clientFactory.CreateClient();
+
             try
             {
-                var response = await _client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
-                var m = response;
+                var response = await client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
+                var m = await response.Content.ReadAsStringAsync();
             } catch
             {
 

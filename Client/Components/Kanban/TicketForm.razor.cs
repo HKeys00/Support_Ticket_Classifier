@@ -15,6 +15,12 @@ namespace Client.Components.Kanban
         public required TicketService TicketService { get; set; }
 
         /// <summary>
+        /// Gets or sets the injected <see cref="ModelService"/> instance.
+        /// </summary>
+        [Inject]
+        public required ModelService ModelService { get; set; }
+
+        /// <summary>
         /// Gets or sets the ticket model data to be supplied by the form.
         /// </summary>
         [SupplyParameterFromForm]
@@ -56,8 +62,14 @@ namespace Client.Components.Kanban
         /// </summary>
         private async void Submit()
         {
-            await TicketService.PostTicketAsync(Ticket);
-            await IsVisibleChanged.InvokeAsync(true);
+            var priority = await ModelService.GetPriorityPrediction(Ticket);
+            Ticket.Priority = priority;
+
+            var response = await TicketService.PostTicketAsync(Ticket);
+            if (response != -1)
+            {
+                await IsVisibleChanged.InvokeAsync(true);
+            }
         }
 
         /// <summary>

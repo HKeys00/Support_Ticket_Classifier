@@ -15,6 +15,7 @@ var connectionString = builder.Configuration.GetConnectionString("Database");
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHttpClient();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddHostedService<StartupWorker>();
 

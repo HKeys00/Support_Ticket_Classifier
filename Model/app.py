@@ -10,18 +10,20 @@ import pandas as pd
 app = Flask(__name__)
 model = joblib.load('ticket_classifier_model.pkl')
 
-@app.route('/', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json(force=True)
-    print(data)
-    new_ticket = pd.DataFrame([data])
-    new_ticket = to_dense_transform(new_ticket)
-    prediction = model.predict(new_ticket)
-    
-    return jsonify({
-        "prediction": prediction[0]
-    })
-    
+    print(data, flush=True)
+    new_ticket = pd.DataFrame([{
+        "Date of Purchase": data["dateOfPurchase"],
+        "Ticket Type": data["type"],
+        "Ticket Subject": data["subject"],
+        "Ticket Description": data["description"],
+        "Ticket Channel": data["channel"]
+    }])
+
+    prediction = model.predict(new_ticket)    
+    return prediction[0]
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
 

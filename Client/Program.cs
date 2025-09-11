@@ -14,7 +14,7 @@ builder.Services.AddHttpClient("Api", client =>
 
 builder.Services.AddScoped<CurrentTicketService>();
 builder.Services.AddScoped<TicketService>();
-
+builder.Services.AddScoped<ModelService>();
 
 var app = builder.Build();
 

@@ -9,13 +9,11 @@
     </div>
     <div class="body segment">
         <div class="column-container">
-
             @{
                 var openTickets = _tickets.Where(t => t.Status == TicketStatus.Open).ToList();
                 var responeTickets = _tickets.Where(t => t.Status == TicketStatus.PendingCustomerResponse).ToList();
                 var closedTickets = _tickets.Where(t => t.Status == TicketStatus.Closed).ToList();
             }
-
 
             <Column Name="OPEN" Tickets="openTickets" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
             <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="responeTickets"/>
