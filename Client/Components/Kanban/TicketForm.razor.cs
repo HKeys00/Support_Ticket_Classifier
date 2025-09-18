@@ -1,6 +1,7 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
 using Shared.Enums.Ticket;
+using Shared.Helpers;
 
 namespace Client.Components.Kanban
 {
@@ -45,6 +46,9 @@ namespace Client.Components.Kanban
         [Parameter]
         public required EventCallback<bool> IsVisibleChanged { get; set; }
 
+        /// <summary>
+        /// Gets or sets the event callback to trigger when a ticket has been updated.
+        /// </summary>
         [Parameter]
         public required EventCallback<Shared.Models.Ticket?> TicketChanged { get; set; }
 
@@ -72,21 +76,7 @@ namespace Client.Components.Kanban
             if (Ticket != null)
             {
                 _isNew = false;
-                _ticketModel = new Shared.Models.Ticket()
-                {
-                    Id = Ticket.Id,
-                    Customer = Ticket.Customer,
-                    ProductPurchased = Ticket.ProductPurchased,
-                    DateOfPurchase = Ticket.DateOfPurchase,
-                    Type = Ticket.Type,
-                    Subject = Ticket.Subject,
-                    Description = Ticket.Description,
-                    Channel = Ticket.Channel,
-                    Priority = Ticket.Priority,
-                    Status = Ticket.Status,
-                    DateResolved = Ticket.DateResolved,
-                    Resolution = Ticket.Resolution
-                };
+                TicketHelper.CopyTicket(_ticketModel, Ticket);
             }
         }
 
@@ -126,7 +116,7 @@ namespace Client.Components.Kanban
         private async Task UpdateTicket()
         {
             await TicketService.UpdateTicketAsync(_ticketModel);
-            Ticket = _ticketModel;
+            TicketHelper.CopyTicket(Ticket, _ticketModel);
 
             await TicketChanged.InvokeAsync(Ticket);
             await IsVisibleChanged.InvokeAsync(false);

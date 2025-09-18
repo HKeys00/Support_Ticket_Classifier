@@ -1,4 +1,6 @@
-﻿<div class="ticket-container" @onclick=OnTicketClicked>
+﻿<div class="ticket-container"
+     draggable="true"
+     @ondragstart="OnDragStart" @onclick=OnTicketClicked>
     <h5>@Data.Subject</h5>
     <div class="ticket-info">
         <div class="half-container left-side">

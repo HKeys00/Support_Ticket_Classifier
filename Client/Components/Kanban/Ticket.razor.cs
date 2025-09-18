@@ -1,5 +1,6 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Client.Components.Kanban
 {
@@ -20,7 +21,6 @@ namespace Client.Components.Kanban
         [Inject]
         public required CurrentTicketService CurrentTicketService { get; set; }
 
-
         /// <summary>
         /// Gets or sets the ticket data.
         /// </summary>
@@ -32,6 +32,12 @@ namespace Client.Components.Kanban
         /// </summary>
         [Parameter]
         public required EventCallback<Shared.Models.Ticket> DataChanged { get; set; }
+
+        /// <summary>
+        /// Gets or sets the event callback to trigger when a ticket drag starts.
+        /// </summary>
+        [Parameter]
+        public EventCallback<Shared.Models.Ticket> OnDragStartTicket { get; set; }
 
         #endregion
 
@@ -57,6 +63,15 @@ namespace Client.Components.Kanban
         public void OnTicketClicked()
         {
             CurrentTicketService.Id = Data.Id;
+        }
+
+        /// <summary>
+        /// Event handler for when the ticket drag starts.
+        /// </summary>
+        /// <param name="e">Drage event params</param>
+        private async Task OnDragStart(DragEventArgs e)
+        {
+            await OnDragStartTicket.InvokeAsync(Data);
         }
 
         #endregion
