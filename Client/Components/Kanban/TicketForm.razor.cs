@@ -45,6 +45,9 @@ namespace Client.Components.Kanban
         [Parameter]
         public required EventCallback<bool> IsVisibleChanged { get; set; }
 
+        [Parameter]
+        public required EventCallback<Shared.Models.Ticket?> TicketChanged { get; set; }
+
         #endregion
 
         #region Methods
@@ -88,7 +91,7 @@ namespace Client.Components.Kanban
         }
 
         /// <summary>
-        /// Submits the new ticket.
+        /// Submits the ticket.
         /// </summary>
         private async void Submit()
         {
@@ -102,28 +105,31 @@ namespace Client.Components.Kanban
             }
         }
 
+        /// <summary>
+        /// Requests for a new ticket to be created in the database.
+        /// </summary>
         private async Task CreateTicket()
         {
-            var priority = await ModelService.GetPriorityPrediction(Ticket);
-            Ticket.Priority = priority;
+            var priority = await ModelService.GetPriorityPrediction(_ticketModel);
+            _ticketModel.Priority = priority;
 
-            var response = await TicketService.PostTicketAsync(Ticket);
+            var response = await TicketService.CreateTicketAsync(_ticketModel);
             if (response != -1)
             {
-                await IsVisibleChanged.InvokeAsync(true);
+                await IsVisibleChanged.InvokeAsync(false);
             }
         }
 
+        /// <summary>
+        /// Requests the update of a specific existing ticket.
+        /// </summary>
         private async Task UpdateTicket()
         {
-            var priority = await ModelService.GetPriorityPrediction(Ticket);
-            Ticket.Priority = priority;
+            await TicketService.UpdateTicketAsync(_ticketModel);
+            Ticket = _ticketModel;
 
-            var response = await TicketService.PostTicketAsync(Ticket);
-            if (response != -1)
-            {
-                await IsVisibleChanged.InvokeAsync(true);
-            }
+            await TicketChanged.InvokeAsync(Ticket);
+            await IsVisibleChanged.InvokeAsync(false);
         }
 
         /// <summary>

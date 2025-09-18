@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
+using System.Threading.Channels;
 
 namespace Api.Controllers
 {
@@ -87,6 +88,36 @@ namespace Api.Controllers
             } catch
             {
                 return BadRequest(-1);
+            }
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UpdateTicket([FromBody] Ticket ticket)
+        {
+            try
+            {
+                var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticket.Id);
+                if (existingTicket == null)
+                {
+                    return BadRequest();
+                }
+
+                existingTicket.ProductPurchased = ticket.ProductPurchased;
+                existingTicket.DateOfPurchase = ticket.DateOfPurchase;
+                existingTicket.Type = ticket.Type;
+                existingTicket.Subject = ticket.Subject;
+                existingTicket.Description = ticket.Description;
+                existingTicket.Channel = ticket.Channel;
+                existingTicket.Priority = ticket.Priority;
+                existingTicket.DateResolved = ticket.DateResolved;
+                existingTicket.Resolution = ticket.Resolution;
+
+                await _context.SaveChangesAsync();
+            return Ok();
+            } catch {
+                return BadRequest();
             }
         }
         #endregion

@@ -52,26 +52,30 @@ namespace Client.Services
         /// Posts a new ticket to the database.
         /// </summary>
         /// <param name="ticket">The ticket data.</param>
-        public async Task<int> PostTicketAsync(Ticket ticket)
+        public async Task<int> CreateTicketAsync(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PostAsJsonAsync<Ticket>("ticket", ticket);
+            var response = await client.PostAsJsonAsync("ticket", ticket);
 
             if (!response.IsSuccessStatusCode)
             {
                 return 1; 
+                //TODO: Proper error handling.
             }
 
             var ticketId = await response.Content.ReadFromJsonAsync<int>();
             return ticketId;
         }
 
-        public async Task PutTicketAsync(Ticket ticket)
+        public async Task UpdateTicketAsync(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
-            var response = await client.P
+            var response = await client.PutAsJsonAsync("ticket", ticket);
 
-
+            if (!response.IsSuccessStatusCode)
+            {
+                //TODO: Proper error handling.
+            }
         }
 
         #endregion
