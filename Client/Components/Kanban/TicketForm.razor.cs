@@ -6,6 +6,13 @@ namespace Client.Components.Kanban
 {
     public partial class TicketForm
     {
+        #region Fields
+
+        private Shared.Models.Ticket _ticketModel;
+        private bool _isNew;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -23,8 +30,8 @@ namespace Client.Components.Kanban
         /// <summary>
         /// Gets or sets the ticket model data to be supplied by the form.
         /// </summary>
-        [SupplyParameterFromForm]
-        public required Shared.Models.Ticket Ticket { get; set; }
+        [Parameter]
+        public required Shared.Models.Ticket? Ticket { get; set; }
 
         /// <summary>
         /// Gets or sets if the ticket form dialog is currently visible.
@@ -45,14 +52,37 @@ namespace Client.Components.Kanban
         /// <inheritdoc />
         protected override void OnParametersSet()
         {
-            if (IsVisible)
+            if (!IsVisible)
             {
-                Ticket = new()
+                return;
+            }
+
+            _isNew = true;
+            _ticketModel = new()
+            {
+                Customer = new Shared.Models.Customer(),
+                DateOfPurchase = DateTime.Today,
+                Status = TicketStatus.Open,
+                Type = TicketType.None
+            };
+
+            if (Ticket != null)
+            {
+                _isNew = false;
+                _ticketModel = new Shared.Models.Ticket()
                 {
-                    Customer = new Shared.Models.Customer(),
-                    DateOfPurchase = DateTime.Today,
-                    Status = TicketStatus.Open,
-                    Type = TicketType.None
+                    Id = Ticket.Id,
+                    Customer = Ticket.Customer,
+                    ProductPurchased = Ticket.ProductPurchased,
+                    DateOfPurchase = Ticket.DateOfPurchase,
+                    Type = Ticket.Type,
+                    Subject = Ticket.Subject,
+                    Description = Ticket.Description,
+                    Channel = Ticket.Channel,
+                    Priority = Ticket.Priority,
+                    Status = Ticket.Status,
+                    DateResolved = Ticket.DateResolved,
+                    Resolution = Ticket.Resolution
                 };
             }
         }
@@ -61,6 +91,30 @@ namespace Client.Components.Kanban
         /// Submits the new ticket.
         /// </summary>
         private async void Submit()
+        {
+            if (_isNew)
+            {
+                await CreateTicket();
+            }
+            else
+            {
+                await UpdateTicket();
+            }
+        }
+
+        private async Task CreateTicket()
+        {
+            var priority = await ModelService.GetPriorityPrediction(Ticket);
+            Ticket.Priority = priority;
+
+            var response = await TicketService.PostTicketAsync(Ticket);
+            if (response != -1)
+            {
+                await IsVisibleChanged.InvokeAsync(true);
+            }
+        }
+
+        private async Task UpdateTicket()
         {
             var priority = await ModelService.GetPriorityPrediction(Ticket);
             Ticket.Priority = priority;

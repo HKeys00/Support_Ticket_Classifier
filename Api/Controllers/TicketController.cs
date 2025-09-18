@@ -43,7 +43,9 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == id);
+            var ticket = await _context.Tickets
+                .Include(t => t.Customer)
+                .FirstOrDefaultAsync(t => t.Id == id);
             if (ticket == null)
             {
                 return NotFound();
@@ -60,7 +62,10 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Ticket>>> GetAllTickets()
         {
-            var tickets = await _context.Tickets.ToListAsync();
+            var tickets = await _context.Tickets
+                .Include(t => t.Customer)
+                .ToListAsync();
+
             return Ok(tickets);
         }
 

@@ -13,6 +13,7 @@ namespace Client.Components.Pages
         private List<Ticket> _tickets;
         private Ticket? _selectedTicket;
 
+        private bool _existingTicketDialogShowing;
         private bool _newTicketDialogShowing;
 
         #endregion
@@ -67,6 +68,7 @@ namespace Client.Components.Pages
         private void OnTicketSelected(int? id)
         {
             _selectedTicket = _tickets.FirstOrDefault(t => t.Id == id);
+            _existingTicketDialogShowing = true;
             StateHasChanged();
         }
 

@@ -66,6 +66,14 @@ namespace Client.Services
             return ticketId;
         }
 
+        public async Task PutTicketAsync(Ticket ticket)
+        {
+            using var client = _clientFactory.CreateClient("Api");
+            var response = await client.P
+
+
+        }
+
         #endregion
     }
 }

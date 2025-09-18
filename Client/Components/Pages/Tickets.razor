@@ -23,9 +23,5 @@
     <div class="footer segment"></div>
 </div>
 
-@if (_selectedTicket != null)
-{
-    <TicketDetails Ticket="_selectedTicket"/>
-}
-
+<TicketForm @bind-IsVisible="_existingTicketDialogShowing" Ticket="_selectedTicket" />
 <TicketForm @bind-IsVisible="_newTicketDialogShowing" />
