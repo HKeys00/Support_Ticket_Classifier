@@ -68,6 +68,26 @@ namespace Client.Components.Kanban
             await AddTicketsEvent.InvokeAsync(ticket);
         }
 
+        [Parameter] public EventCallback<Shared.Models.Ticket> OnTicketDropped { get; set; }
+        [Parameter] public TicketStatus ColumnStatus { get; set; }
+
+        private Shared.Models.Ticket? _draggedTicket;
+
+        private void OnDragOver(DragEventArgs e)
+        {
+            e.PreventDefault(); // Allow drop
+        }
+
+        private async Task OnDrop(DragEventArgs e)
+        {
+            if (_draggedTicket != null)
+            {
+                _draggedTicket.Status = ColumnStatus;
+                await OnTicketDropped.InvokeAsync(_draggedTicket);
+                _draggedTicket = null;
+            }
+        }
+
         #endregion
     }
 }
