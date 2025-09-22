@@ -12,6 +12,7 @@ namespace Client.Components.Kanban
         #region Fields
 
         private int _ticketCount;
+        private Shared.Models.Ticket? _draggedTicket;
 
         #endregion
 
@@ -29,6 +30,8 @@ namespace Client.Components.Kanban
         [Parameter]
         public required List<Shared.Models.Ticket> Tickets { get; set; }
 
+        [Parameter] public TicketStatus ColumnStatus { get; set; }
+
         /// <summary>
         /// Gets or sets whether or not tickets can be added to this column.
         /// </summary>
@@ -40,6 +43,11 @@ namespace Client.Components.Kanban
         /// </summary>
         [Parameter]
         public EventCallback<Shared.Models.Ticket> AddTicketsEvent { get; set; }
+
+        /// <summary>
+        /// Gets or sets the event to call be a ticket is dropped.
+        /// </summary>
+        [Parameter] public EventCallback<Shared.Models.Ticket> OnTicketDropped { get; set; }
 
         #endregion
 
@@ -67,17 +75,7 @@ namespace Client.Components.Kanban
 
             await AddTicketsEvent.InvokeAsync(ticket);
         }
-
-        [Parameter] public EventCallback<Shared.Models.Ticket> OnTicketDropped { get; set; }
-        [Parameter] public TicketStatus ColumnStatus { get; set; }
-
-        private Shared.Models.Ticket? _draggedTicket;
-
-        private void OnDragOver(DragEventArgs e)
-        {
-            e.PreventDefault(); // Allow drop
-        }
-
+        
         private async Task OnDrop(DragEventArgs e)
         {
             if (_draggedTicket != null)
