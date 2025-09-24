@@ -106,6 +106,7 @@ namespace Client.Components.Kanban
             var response = await TicketService.CreateTicketAsync(_ticketModel);
             if (response != -1)
             {
+                StateHasChanged();
                 await IsVisibleChanged.InvokeAsync(false);
             }
         }

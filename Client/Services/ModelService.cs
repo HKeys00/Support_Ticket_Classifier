@@ -39,7 +39,9 @@ namespace Client.Services
             using var client = _clientFactory.CreateClient("Api");
             var response = await client.PostAsJsonAsync<Ticket>("model", ticket);
 
-            return TicketPriority.Low;
+            var result = await response.Content.ReadAsStringAsync();
+            var prediction = int.Parse(result);
+            return (TicketPriority)prediction;
         }
 
         #endregion

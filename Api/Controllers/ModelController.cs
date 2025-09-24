@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Models;
+using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -46,13 +48,18 @@ namespace Api.Controllers
             try
             {
                 var response = await client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
-                var m = await response.Content.ReadAsStringAsync();
-            } catch
+                var json = await response.Content.ReadAsStringAsync();
+                var prediction = JsonSerializer.Deserialize<PredictionDto>(json);
+
+                if (prediction == null) {
+                    throw new Exception("");
+                }
+
+                return Ok(prediction.Prediction);
+            } catch (Exception ex)
             {
-
+                return BadRequest(ex.Message);
             }
-
-            return Ok(-1);
         }
 
         #endregion
