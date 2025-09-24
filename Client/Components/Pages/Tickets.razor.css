@@ -1,7 +1,6 @@
 ﻿.page {
     background: #f4f5f7;
     min-height: 100vh;
-    padding: 32px 0;
     font-family: 'Segoe UI', 'Arial',
 }
 
@@ -49,7 +48,6 @@
     }
 
 .footer.segment {
-    margin-top: 32px;
     background: none;
     box-shadow: none;
     min-height: 24px;
