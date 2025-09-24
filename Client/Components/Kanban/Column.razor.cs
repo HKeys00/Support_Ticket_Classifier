@@ -42,7 +42,7 @@ namespace Client.Components.Kanban
         /// Gets or sets the event to call when a new ticket is added to the column.
         /// </summary>
         [Parameter]
-        public EventCallback<Shared.Models.Ticket> AddTicketsEvent { get; set; }
+        public EventCallback AddTicketsEvent { get; set; }
 
         /// <summary>
         /// Gets or sets the event to call be a ticket is dropped.
@@ -64,16 +64,7 @@ namespace Client.Components.Kanban
         /// </summary>
         private async Task OnAddTicketClicked()
         {
-            Shared.Models.Ticket ticket = new()
-            {
-                Subject = "New Ticket",
-                Description = string.Empty,
-                Type = TicketType.None,
-                Priority = TicketPriority.Low,
-                Status = TicketStatus.Open
-            };
-
-            await AddTicketsEvent.InvokeAsync(ticket);
+            await AddTicketsEvent.InvokeAsync();
         }
         
         private async Task OnDrop(DragEventArgs e)

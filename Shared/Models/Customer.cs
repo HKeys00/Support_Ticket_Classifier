@@ -20,13 +20,13 @@ namespace Shared.Models
         /// <summary>
         /// Gets or sets the customers full name.
         /// </summary>
-        [MaxLength(50)]        
+        [Required, MaxLength(50)]        
         public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets the customers email address.
         /// </summary>
-        [MaxLength(50)]        
+        [Required, MaxLength(50)]        
         public string Email { get; set; }
     }
 }

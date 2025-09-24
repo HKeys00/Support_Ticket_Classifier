@@ -49,7 +49,7 @@ namespace Client.Components.Pages
         /// Adds a ticket to the database.
         /// </summary>
         /// <param name="ticket">The details of the new ticket.</param>
-        private async Task OnNewTicketAdded(Ticket ticket)
+        private async Task OnNewTicketAdded()
         {
             _newTicketDialogShowing = true;
             //using var client = ClientFactory.CreateClient("Api");

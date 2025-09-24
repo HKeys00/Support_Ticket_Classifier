@@ -1,7 +1,8 @@
 ﻿@using Client.Components.Common;        
 @using Shared.Enums.Ticket;
 <Dialog IsVisible="@IsVisible">
-    <EditForm Model="_ticketModel" OnSubmit="Submit" FormName="NewTicket">
+    <EditForm Model="_ticketModel" OnValidSubmit="Submit" FormName="NewTicket">
+        <ObjectGraphDataAnnotationsValidator />
         <div class="header">
             @if (_isNew)
             {
@@ -12,20 +13,24 @@
                 <h1>Edit Ticket</h1>
             }
         </div>
-        <div class="body">         
+
+        <div class="body">
             <label>
                 Ticket Type
-                <InputSelect id="type" @bind-Value="_ticketModel.Type">
+                <InputSelect id="type" TValue="TicketType" @bind-Value="_ticketModel.Type">
                     <option value="@TicketType.ProductInquiry">Product Inquiry</option>
                     <option value="@TicketType.RefundRequest">Refund Request</option>
                     <option value="@TicketType.CancellationRequest">Cancellation Request</option>
                     <option value="@TicketType.BillingInquiry">Billing Inquiry</option>
                     <option value="@TicketType.TechnicalIssue">Technical Issue</option>
                 </InputSelect>
+                <ValidationMessage For="@(() => _ticketModel.Type)" />
             </label>
+
             <label>
                 Subject:
                 <InputText id="subject" @bind-Value="_ticketModel.Subject" />
+                <ValidationMessage For="@(() => _ticketModel.Subject)" />
             </label>
 
             <div class="customer-details">
@@ -33,12 +38,13 @@
                 <label>
                     Email:
                     <InputText @bind-Value="_ticketModel.Customer.Email" />
+                    <ValidationMessage For="@(() => _ticketModel.Customer.Email)" />
                 </label>
                 <label>
                     Name:
                     <InputText @bind-Value="_ticketModel.Customer.Name" />
+                    <ValidationMessage For="@(() => _ticketModel.Customer.Name)" />
                 </label>
-                
             </div>
 
             <div class="ticket-details">
@@ -50,23 +56,31 @@
                         <option value="@TicketChannel.Phone">Phone</option>
                         <option value="@TicketChannel.Chat">Chat</option>
                     </InputSelect>
+                    <ValidationMessage For="@(() => _ticketModel.Channel)" />
                 </label>
+
                 <label>
-                    Product: 
+                    Product:
                     <InputText @bind-Value="_ticketModel.ProductPurchased" />
+                    <ValidationMessage For="@(() => _ticketModel.ProductPurchased)" />
                 </label>
+
                 <label>
                     Date Of Purchase:
                     <InputDate @bind-Value="_ticketModel.DateOfPurchase" />
+                    <ValidationMessage For="@(() => _ticketModel.DateOfPurchase)" />
                 </label>
+
                 <label>
                     Description:
                     <InputTextArea @bind-Value="_ticketModel.Description" />
+                    <ValidationMessage For="@(() => _ticketModel.Description)" />
                 </label>
             </div>
         </div>
+
         <div class="footer">
-            <button class="cancel" @onclick=Cancel>Cancel</button>
+            <button class="cancel" @onclick=Cancel type="button">Cancel</button>
             @if (_isNew)
             {
                 <button class="submit" type="submit">Submit</button>

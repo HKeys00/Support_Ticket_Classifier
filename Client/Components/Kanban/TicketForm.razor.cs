@@ -69,8 +69,8 @@ namespace Client.Components.Kanban
             {
                 Customer = new Shared.Models.Customer(),
                 DateOfPurchase = DateTime.Today,
+                Type = TicketType.BillingInquiry,
                 Status = TicketStatus.Open,
-                Type = TicketType.None
             };
 
             if (Ticket != null)
@@ -83,7 +83,7 @@ namespace Client.Components.Kanban
         /// <summary>
         /// Submits the ticket.
         /// </summary>
-        private async void Submit()
+        private async Task Submit()
         {
             if (_isNew)
             {

@@ -18,6 +18,7 @@ namespace Shared.Models
         /// Gets or sets the unique identifier for the <see cref="Ticket"/>.
         /// </summary>
         [Key]
+        [Required]
         public int Id { get; set; }
 
         /// <summary>
@@ -31,36 +32,43 @@ namespace Shared.Models
         /// Gets or sets the customer who raised this ticket.
         /// </summary>
         [NestedObject]
+        [Required]
         public Customer Customer { get; set; }
 
         /// <summary>
         /// Gets or sets the product purchased by the customer.
         /// </summary>
+        [Required]
         public string ProductPurchased { get; set; }
 
         /// <summary>
         /// Gets or sets the date when the product was purchased.
         /// </summary>
+        [Required]
         public DateTime DateOfPurchase { get; set; }
 
         /// <summary>
         /// Gets or sets the type of ticket.
         /// </summary>
+        [Required]
         public TicketType Type { get; set; }
 
         /// <summary>
         /// Gets or sets the subject/topic of the ticket.
         /// </summary>
+        [Required, StringLength(200)]
         public string Subject { get; set; }
 
         /// <summary>
         /// Gets or sets the description of the customer's issue or inquiry.
         /// </summary>
+        [Required, StringLength(500)]
         public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the channel through which the ticket was raised.
         /// </summary>
+        [Required]
         public TicketChannel Channel { get; set; }
 
         /// <summary>
