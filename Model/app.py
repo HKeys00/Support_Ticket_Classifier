@@ -13,7 +13,6 @@ model = joblib.load('ticket_classifier_model.pkl')
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json(force=True)
-    print(data, flush=True)
     new_ticket = pd.DataFrame([{
         "Date of Purchase": data["dateOfPurchase"],
         "Ticket Type": data["type"],
@@ -22,8 +21,11 @@ def predict():
         "Ticket Channel": data["channel"]
     }])
 
+    print(new_ticket.dtypes)
+    print(new_ticket.head())
+
     prediction = model.predict(new_ticket)    
-    return prediction[0]
+    return jsonify({"prediction": int(prediction[0])})
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
 
