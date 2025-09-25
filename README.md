@@ -99,7 +99,6 @@ The model will be trained on the following dataset:
 ---
 
 ## Future Enhancements (Ideas Backlog)
-- Ticket status tracking (open, in progress, resolved)  
 - Notifications or email alerts for high-priority tickets  
 - Role-based access control (admin, support, customer)  
 
