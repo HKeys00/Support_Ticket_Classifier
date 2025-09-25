@@ -61,7 +61,7 @@ The model will be trained on the following dataset:
 - [x] Update tickets (basic edit form)  
 - [x] Query ML model for predicted priority on ticket creation  
 - [ ] Manually update priority and log correction  
-- [ ] Drag & drop tickets between columns (updates DB + model feedback)  
+- [ ] Drag & drop tickets between columns (updates DB)  
 
 ---
 
