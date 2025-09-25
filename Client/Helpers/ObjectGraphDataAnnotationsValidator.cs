@@ -6,7 +6,7 @@ using System.Reflection;
 public class ObjectGraphDataAnnotationsValidator : ComponentBase
 {
     [CascadingParameter] private EditContext CurrentEditContext { get; set; } = default!;
-    private ValidationMessageStore _messageStore = default!;
+    private ValidationMessageStore _messages = default!;
 
     protected override void OnInitialized()
     {
@@ -14,7 +14,7 @@ public class ObjectGraphDataAnnotationsValidator : ComponentBase
             throw new InvalidOperationException($"{nameof(ObjectGraphDataAnnotationsValidator)} requires a cascading " +
                                                 $"parameter of type {nameof(EditContext)}.");
 
-        _messageStore = new ValidationMessageStore(CurrentEditContext);
+        _messages = new ValidationMessageStore(CurrentEditContext);
 
         CurrentEditContext.OnValidationRequested += (s, e) => ValidateModel();
         CurrentEditContext.OnFieldChanged += (s, e) => ValidateField(e.FieldIdentifier);
@@ -22,48 +22,51 @@ public class ObjectGraphDataAnnotationsValidator : ComponentBase
 
     private void ValidateModel()
     {
-        _messageStore.Clear();
+        _messages.Clear();
         ValidateObjectRecursive(CurrentEditContext.Model, null);
         CurrentEditContext.NotifyValidationStateChanged();
     }
 
     private void ValidateField(FieldIdentifier fieldIdentifier)
     {
-        _messageStore.Clear(fieldIdentifier);
+        _messages.Clear(fieldIdentifier);
         ValidateObjectRecursive(CurrentEditContext.Model, null);
         CurrentEditContext.NotifyValidationStateChanged();
     }
 
-    private void ValidateObjectRecursive(object obj, string? parentPath)
+    private void ValidateObjectRecursive(object instance, object? parent)
     {
-        if (obj == null) return;
+        if (instance == null) return;
 
-        var context = new ValidationContext(obj);
+        var validationContext = new ValidationContext(instance);
         var results = new List<ValidationResult>();
-        Validator.TryValidateObject(obj, context, results, true);
+        Validator.TryValidateObject(instance, validationContext, results, validateAllProperties: true);
 
         foreach (var validationResult in results)
         {
             foreach (var memberName in validationResult.MemberNames)
             {
-                string fullPath = parentPath != null ? $"{parentPath}.{memberName}" : memberName;
-                var field = CurrentEditContext.Field(fullPath);
-                _messageStore.Add(field, validationResult.ErrorMessage!);
+                // Build a FieldIdentifier for this property
+                var propInfo = instance.GetType().GetProperty(memberName);
+                if (propInfo != null)
+                {
+                    var field = new FieldIdentifier(instance, memberName);
+                    _messages.Add(field, validationResult.ErrorMessage!);
+                }
             }
         }
 
-        // Recurse into nested properties
-        var properties = obj.GetType()
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                            .Where(p => p.CanRead && p.PropertyType.IsClass && p.PropertyType != typeof(string));
+        // Recurse into nested complex properties
+        var complexProps = instance.GetType()
+                                   .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                   .Where(p => p.CanRead && p.PropertyType.IsClass && p.PropertyType != typeof(string));
 
-        foreach (var prop in properties)
+        foreach (var prop in complexProps)
         {
-            var value = prop.GetValue(obj);
-            string path = parentPath != null ? $"{parentPath}.{prop.Name}" : prop.Name;
+            var value = prop.GetValue(instance);
             if (value != null)
             {
-                ValidateObjectRecursive(value, path);
+                ValidateObjectRecursive(value, instance);
             }
         }
     }

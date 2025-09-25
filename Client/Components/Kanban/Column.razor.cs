@@ -30,7 +30,11 @@ namespace Client.Components.Kanban
         [Parameter]
         public required List<Shared.Models.Ticket> Tickets { get; set; }
 
-        [Parameter] public TicketStatus ColumnStatus { get; set; }
+        /// <summary>
+        /// Gets or sets the status associated with the column.
+        /// </summary>
+        [Parameter] 
+        public TicketStatus ColumnStatus { get; set; }
 
         /// <summary>
         /// Gets or sets whether or not tickets can be added to this column.

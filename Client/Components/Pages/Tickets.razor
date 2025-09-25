@@ -15,9 +15,9 @@
                 var closedTickets = _tickets.Where(t => t.Status == TicketStatus.Closed).ToList();
             }
 
-            <Column Name="OPEN" Tickets="openTickets" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
-            <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="responeTickets"/>
-            <Column Name="CLOSED" Tickets="closedTickets"/>
+            <Column Name="OPEN" Tickets="openTickets" ColumnStatus="TicketStatus.Open" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
+            <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="responeTickets" ColumnStatus="TicketStatus.PendingCustomerResponse"/>
+            <Column Name="CLOSED" Tickets="closedTickets" ColumnStatus="TicketStatus.Closed"/>
         </div>
     </div>
     <div class="footer segment"></div>
