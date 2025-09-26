@@ -24,9 +24,12 @@ These tickets will be visible in a JIRA-style layout for a support user to view.
 
 ---
 
-## Dataset
+## Model
 The model will be trained on the following dataset:  
-👉 [Customer Support Ticket Dataset (Kaggle)](https://www.kaggle.com/datasets/suraj520/customer-support-ticket-dataset/data)
+[Customer Support Ticket Dataset (Kaggle)](https://www.kaggle.com/datasets/suraj520/customer-support-ticket-dataset/data)
+
+The model is created in the following kaggle notebook:
+[Kaggle Notebook](https://www.kaggle.com/code/harrykeys/ticket-priority-classifier) (need to make public)
 
 ---
 
@@ -55,7 +58,7 @@ The model will be trained on the following dataset:
 
 ## Roadmap
 
-### ✅ v1.0 – MVP (Core Features)
+### v1.0 – MVP (Core Features)
 - [x] Create new tickets (form with validation)  
 - [x] View tickets in columns by priority  
 - [x] Update tickets (basic edit form)  
@@ -65,7 +68,7 @@ The model will be trained on the following dataset:
 
 ---
 
-### 🎨 v1.1 – Polish (Usability + Feedback Loop)
+### v1.1 – Polish (Usability + Feedback Loop)
 - [ ] Feed manual corrections back into a feedback dataset  
 - [ ] “Retrain model” button (admin-only) to reload ML with corrections  
 - [ ] Display ML prediction confidence (probabilities per class)  
@@ -78,7 +81,7 @@ The model will be trained on the following dataset:
 
 ---
 
-### 🚀 v1.2 – Production Ready (DevOps + Reliability)
+### v1.2 – Production Ready (DevOps + Reliability)
 - [ ] Deploy app + DB to Azure App Service + Azure SQL  
 - [ ] Set up CI/CD pipeline (GitHub Actions or Azure DevOps)  
 - [ ] Seed DB with realistic fake tickets for demo  
@@ -88,7 +91,7 @@ The model will be trained on the following dataset:
 
 ---
 
-### ⭐ v1.3 – Portfolio Enhancements (Standout Features)
+### v1.3 – Enhancements
 - [ ] Authentication & role-based access (Agents vs Managers)  
 - [ ] Search & filter tickets (by customer, priority, status)  
 - [ ] Export tickets to CSV/Excel  
