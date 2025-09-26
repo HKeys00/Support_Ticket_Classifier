@@ -1,5 +1,7 @@
-﻿using Client.Services;
+﻿using Client.Model;
+using Client.Services;
 using Microsoft.AspNetCore.Components;
+using Shared.Enums.Ticket;
 using Shared.Models;
 namespace Client.Components.Pages
 {
@@ -21,16 +23,22 @@ namespace Client.Components.Pages
         #region Properties
 
         /// <summary>
+        /// Gets or sets the injected <see cref="TicketService"/> instance.
+        /// </summary>
+        [Inject]
+        public required TicketService TicketService { get; set; }
+
+        /// <summary>
         /// Gets or sets the injected <see cref="CurrentTicketService"/> instance.
         /// </summary>
         [Inject]
         public required CurrentTicketService CurrentTicketService { get; set; }
 
         /// <summary>
-        /// Gets or sets the injected <see cref="TicketService"/> instance.
+        /// Gets or sets the injected <see cref="TicketDragService"/> instance.
         /// </summary>
         [Inject]
-        public required TicketService TicketService { get; set; }
+        public required TicketDragService TicketDragService { get; set; }
 
         #endregion
 
@@ -40,6 +48,7 @@ namespace Client.Components.Pages
         protected override async Task OnInitializedAsync()
         {
             CurrentTicketService.OnTicketChange += OnTicketSelected;
+            TicketDragService.TicketDragged += OnTicketDragged;
             _tickets = new List<Ticket>();
 
             _tickets = await TicketService.GetTicketsAsync();
@@ -49,16 +58,36 @@ namespace Client.Components.Pages
         /// Adds a ticket to the database.
         /// </summary>
         /// <param name="ticket">The details of the new ticket.</param>
-        private async Task OnNewTicketAdded()
+        private void OnNewTicketAdded()
         {
             _newTicketDialogShowing = true;
-            //using var client = ClientFactory.CreateClient("Api");
+        }
 
-            //var response = await client.PostAsJsonAsync("ticket", ticket);
-            //if (response != null)
-            //{
-            //    ticket.Id = 0;
-            //}
+        /// <summary>
+        /// Handles a ticket dragged event.
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        private async void OnTicketDragged(TicketDragEventArgs e)
+        {
+            _selectedTicket = _tickets.FirstOrDefault(t => t.Id == e.Id);
+            if (_selectedTicket == null)
+            {
+                //TODO Hadnle Error
+                return;
+            }
+
+            _selectedTicket.Status = (TicketStatus)e.TicketStatus;
+
+            try
+            {
+                await TicketService.UpdateTicketAsync(_selectedTicket);
+            }
+            catch (Exception ex)
+            {
+                //TODO Errors
+            }
+            
+            StateHasChanged();
         }
 
         /// <summary>

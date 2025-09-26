@@ -104,6 +104,7 @@ namespace Api.Controllers
                     return BadRequest();
                 }
 
+                existingTicket.Status = ticket.Status;
                 existingTicket.ProductPurchased = ticket.ProductPurchased;
                 existingTicket.DateOfPurchase = ticket.DateOfPurchase;
                 existingTicket.Type = ticket.Type;

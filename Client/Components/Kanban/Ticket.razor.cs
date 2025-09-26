@@ -1,6 +1,7 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 
 namespace Client.Components.Kanban
 {
@@ -14,6 +15,12 @@ namespace Client.Components.Kanban
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the injected <see cref="IJSRuntime"/>
+        /// </summary>
+        [Inject]
+        public required IJSRuntime JSRuntime { get; set; }
 
         /// <summary>
         /// Gets or sets the injected <see cref="CurrentTicketService"/> instance.
@@ -71,7 +78,9 @@ namespace Client.Components.Kanban
         /// <param name="e">Drage event params</param>
         private async Task OnDragStart(DragEventArgs e)
         {
-            await OnDragStartTicket.InvokeAsync(Data);
+            e.DataTransfer.DropEffect = "move";
+            e.DataTransfer.EffectAllowed = "move";
+            await JSRuntime.InvokeVoidAsync("dragDropHelper.setData", e, "text/plain", Data.Id.ToString());
         }
 
         #endregion

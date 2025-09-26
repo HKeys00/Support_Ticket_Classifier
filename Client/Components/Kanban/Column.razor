@@ -1,4 +1,6 @@
-﻿<div class="column">
+﻿<div class="column"
+    ondragover="event.preventDefault();"
+    @ondrop="OnDrop">
     <div class="column-header">
         <p class="column-name">@Name</p>
         <p class="column-ticket-count">@_ticketCount</p>

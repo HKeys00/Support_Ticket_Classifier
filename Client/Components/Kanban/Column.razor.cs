@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Client.Model;
+using Client.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using Shared.Enums.Ticket;
 
 namespace Client.Components.Kanban
@@ -12,11 +15,22 @@ namespace Client.Components.Kanban
         #region Fields
 
         private int _ticketCount;
-        private Shared.Models.Ticket? _draggedTicket;
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the injected <see cref="IJSRuntime"/>
+        /// </summary>
+        [Inject]
+        public required IJSRuntime JSRuntime { get; set; }
+
+        /// <summary>
+        /// Gets or sets the injected <see cref="TicketDragService"/>
+        /// </summary>
+        [Inject]
+        public required TicketDragService TicketDragService { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the column to display in the header.
@@ -48,11 +62,6 @@ namespace Client.Components.Kanban
         [Parameter]
         public EventCallback AddTicketsEvent { get; set; }
 
-        /// <summary>
-        /// Gets or sets the event to call be a ticket is dropped.
-        /// </summary>
-        [Parameter] public EventCallback<Shared.Models.Ticket> OnTicketDropped { get; set; }
-
         #endregion
 
         #region Methods
@@ -71,14 +80,20 @@ namespace Client.Components.Kanban
             await AddTicketsEvent.InvokeAsync();
         }
         
+        /// <summary>
+        /// Handles the event when a ticket is dropped onto a column
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
         private async Task OnDrop(DragEventArgs e)
         {
-            if (_draggedTicket != null)
+            var ticketIdString = await JSRuntime.InvokeAsync<string>("dragDropHelper.getData", e, "text/plain");
+            if (int.TryParse(ticketIdString, out var ticketId))
             {
-                _draggedTicket.Status = ColumnStatus;
-                await OnTicketDropped.InvokeAsync(_draggedTicket);
-                _draggedTicket = null;
+                var args = new TicketDragEventArgs(ticketId, (int)ColumnStatus);
+                TicketDragService.RaiseTicketDragged(args);
             }
+
+            //TODO - Throw error
         }
 
         #endregion
