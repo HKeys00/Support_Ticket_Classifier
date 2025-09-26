@@ -63,7 +63,7 @@ The model is created in the following kaggle notebook:
 - [x] View tickets in columns by priority  
 - [x] Update tickets (basic edit form)  
 - [x] Query ML model for predicted priority on ticket creation  
-- [ ] Manually update priority and log correction  
+- [x] Manually update priority and log correction  
 - [x] Drag & drop tickets between columns (updates DB)  
 
 ---
