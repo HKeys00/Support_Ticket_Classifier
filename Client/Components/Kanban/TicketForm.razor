@@ -24,7 +24,6 @@
                     <option value="@TicketType.BillingInquiry">Billing Inquiry</option>
                     <option value="@TicketType.TechnicalIssue">Technical Issue</option>
                 </InputSelect>
-                <ValidationMessage For="@(() => _ticketModel.Type)" />
             </label>
 
             <label>
@@ -56,7 +55,6 @@
                         <option value="@TicketChannel.Phone">Phone</option>
                         <option value="@TicketChannel.Chat">Chat</option>
                     </InputSelect>
-                    <ValidationMessage For="@(() => _ticketModel.Channel)" />
                 </label>
 
                 <label>
@@ -80,15 +78,31 @@
         </div>
 
         <div class="footer">
-            <button class="cancel" @onclick=Cancel type="button">Cancel</button>
-            @if (_isNew)
+            @if (!_isNew)
             {
-                <button class="submit" type="submit">Submit</button>
+                <div class="priority">
+                    <label>
+                        Ticket Priority
+                    </label>
+                    <InputSelect id="type" TValue="TicketPriority" @bind-Value="_ticketModel.Priority">
+                        <option value="@TicketPriority.Low">Low</option>
+                        <option value="@TicketPriority.Medium">Medium</option>
+                        <option value="@TicketPriority.High">High</option>
+                        <option value="@TicketPriority.Critical">Critical</option>
+                    </InputSelect>
+                </div>
             }
-            else
-            {
-                <button class="submit" type="submit">Save</button>
-            }
+            <div class="action-buttons">
+                <button class="cancel" @onclick=Cancel type="button">Cancel</button>
+                @if (_isNew)
+                {
+                    <button class="submit" type="submit">Submit</button>
+                }
+                else
+                {
+                    <button class="submit" type="submit">Save</button>
+                }
+            </div>
         </div>
     </EditForm>
 </Dialog>

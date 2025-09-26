@@ -86,35 +86,52 @@ form {
 
 .footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding-top: 0.7rem;
     border-top: 1px solid #dfe1e6;
     gap: 8px;
     font-size: 1rem;
 }
 
-    .footer .cancel {
-        background: white;
-        border: none;
-        font-size: 0.97rem;
-        padding: 0.3rem 0.8rem;
+    .footer .priority {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 10px;
     }
 
-    .footer .submit {
-        background: #0052cc;
-        color: white;
-        font-weight: 500;
-        border: none;
-        border-radius: 4px;
-        padding: 0.3rem 1rem;
-        font-size: 0.97rem;
-        cursor: pointer;
-        transition: background 0.2s ease;
-    }
-
-        .footer .submit:hover {
-            background: #0065ff;
+        .footer .priority label {
+            margin: 0;
+            min-width: 100px;
         }
+
+    .footer .action-buttons {
+        display: flex;
+        justify-content: flex-end
+    }
+
+        .footer .action-buttons .cancel {
+            background: white;
+            border: none;
+            font-size: 0.97rem;
+            padding: 0.3rem 0.8rem;
+        }
+
+        .footer .action-buttons .submit {
+            background: #0052cc;
+            color: white;
+            font-weight: 500;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 1rem;
+            font-size: 0.97rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+            .footer .action-buttons .submit:hover {
+                background: #0065ff;
+            }
 
 
 ::deep .validation-message {
