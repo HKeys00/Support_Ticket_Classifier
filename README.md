@@ -24,9 +24,12 @@ These tickets will be visible in a JIRA-style layout for a support user to view.
 
 ---
 
-## Dataset
+## Model
 The model will be trained on the following dataset:  
 [Customer Support Ticket Dataset (Kaggle)](https://www.kaggle.com/datasets/suraj520/customer-support-ticket-dataset/data)
+
+The model is created in the following kaggle notebook:
+[Kaggle Notebook](https://www.kaggle.com/code/harrykeys/ticket-priority-classifier) (need to make public)
 
 ---
 
