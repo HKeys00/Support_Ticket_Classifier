@@ -20,6 +20,11 @@ namespace Api.Data
         /// </summary>
         public DbSet<Customer> Customers { get; set; }
 
+        /// <summary>
+        /// Gets or sets the collection of all entities in the Corrections database table.
+        /// </summary>
+        public DbSet<Correction> Corrections { get; set; }
+
         #endregion
 
         #region Constructor
@@ -30,12 +35,7 @@ namespace Api.Data
         /// <param name="options">The options to be used by the DbContext.</param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
         {
-
         }
-
-        #endregion
-
-        #region Methods
 
         #endregion
     }

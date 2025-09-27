@@ -104,6 +104,7 @@ namespace Api.Controllers
                     return BadRequest();
                 }
 
+
                 existingTicket.Status = ticket.Status;
                 existingTicket.ProductPurchased = ticket.ProductPurchased;
                 existingTicket.DateOfPurchase = ticket.DateOfPurchase;
@@ -111,13 +112,32 @@ namespace Api.Controllers
                 existingTicket.Subject = ticket.Subject;
                 existingTicket.Description = ticket.Description;
                 existingTicket.Channel = ticket.Channel;
-                existingTicket.Priority = ticket.Priority;
                 existingTicket.DateResolved = ticket.DateResolved;
                 existingTicket.Resolution = ticket.Resolution;
 
+
+                if (existingTicket.Priority != ticket.Priority)
+                {
+                    var existingCorrection = await _context.Corrections.FirstOrDefaultAsync(c => c.TicketId == ticket.Id);
+                    if (existingCorrection != null)
+                    {
+                        existingCorrection.CorrectedPriority = (int)ticket.Priority;
+                    } else
+                    {
+                        await _context.Corrections.AddAsync(new Correction()
+                        {
+                            TicketId = ticket.Id,
+                            ModelPriority = (int)existingTicket.Priority,
+                            CorrectedPriority = (int)ticket.Priority
+                        });
+                    }
+                }
+
+                existingTicket.Priority = ticket.Priority;
                 await _context.SaveChangesAsync();
             return Ok();
             } catch {
+                //TODO Hanndle API ERROR
                 return BadRequest();
             }
         }

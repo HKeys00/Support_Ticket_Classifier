@@ -21,11 +21,13 @@ def predict():
         "Ticket Channel": data["channel"]
     }])
 
-    print(new_ticket.dtypes)
-    print(new_ticket.head())
-
-    prediction = model.predict(new_ticket)    
-    return jsonify({"prediction": int(prediction[0])})
+    predicted_class = int(model.predict(new_ticket)[0])
+    class_probs = model.predict_proba(new_ticket)[0]
+    class_confidence = [float(prob) for cls, prob in zip(model.classes_, class_probs)]
+    return jsonify({
+    "Prediction": predicted_class,
+    "Confidence": class_confidence
+    })
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
 

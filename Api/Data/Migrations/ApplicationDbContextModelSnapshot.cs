@@ -22,6 +22,30 @@ namespace Api.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Shared.Models.Correction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CorrectedPriority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModelPriority")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TicketId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketId");
+
+                    b.ToTable("Corrections");
+                });
+
             modelBuilder.Entity("Shared.Models.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -96,6 +120,17 @@ namespace Api.Data.Migrations
                     b.HasIndex("CustomerId");
 
                     b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("Shared.Models.Correction", b =>
+                {
+                    b.HasOne("Shared.Models.Ticket", "Ticket")
+                        .WithMany()
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ticket");
                 });
 
             modelBuilder.Entity("Shared.Models.Ticket", b =>

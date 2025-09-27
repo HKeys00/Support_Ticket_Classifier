@@ -17,7 +17,6 @@ public class ObjectGraphDataAnnotationsValidator : ComponentBase
         _messages = new ValidationMessageStore(CurrentEditContext);
 
         CurrentEditContext.OnValidationRequested += (s, e) => ValidateModel();
-        CurrentEditContext.OnFieldChanged += (s, e) => ValidateField(e.FieldIdentifier);
     }
 
     private void ValidateModel()

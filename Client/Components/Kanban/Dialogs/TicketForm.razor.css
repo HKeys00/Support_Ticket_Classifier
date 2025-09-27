@@ -1,0 +1,69 @@
+﻿/* General form styling */
+form {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    border: 1px solid #dfe1e6;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(9, 30, 66, 0.15);
+    padding: 1.5rem 2rem;
+}
+
+    label {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #172b4d;
+    }
+        label.required::after {
+            content: " *";
+            color: #ff5630;
+            font-weight: bold;
+        }
+
+::deep select {
+    width: 50%;
+    height: 30px;
+    background-color: #f4f5f8;
+}
+::deep input {
+    height: 30px;
+    background-color: #f4f5f8;
+    padding-inline: 5px;
+}
+::deep textarea {
+    height: 80px;
+    padding: 5px;
+}
+::deep input:focus,
+::deep select:focus,
+::deep textarea:focus {
+    outline: 2px solid #2684ff;
+    background-color: #e6f0ff;
+    transition: outline 0.2s, background 0.2s;
+}
+
+     .customer-details,
+     .ticket-details {
+        border: 1px solid #dfe1e6;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        background: #fafbfc;
+    }
+
+         .customer-details h5 {
+            margin-top: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #172b4d;
+        }
+
+::deep .validation-message {
+    color: #ff5630;
+    font-size: 0.92rem;
+    margin-top: 2px;
+}

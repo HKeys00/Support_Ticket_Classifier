@@ -37,11 +37,11 @@ namespace Api.Controllers
         /// Gets a prediction of the ticket priority from the model.
         /// </summary>
         /// <param name="ticket">The ticket data.</param>
-        /// <returns>The prediction from the model as an int.</returns>
+        /// <returns>The prediction as a json string from the model.</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<int>> GetPriorityPrediction([FromBody] Ticket ticket)
+        public async Task<ActionResult<string>> GetPriorityPrediction([FromBody] Ticket ticket)
         {
             using var client = _clientFactory.CreateClient();
 
@@ -49,13 +49,7 @@ namespace Api.Controllers
             {
                 var response = await client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
                 var json = await response.Content.ReadAsStringAsync();
-                var prediction = JsonSerializer.Deserialize<PredictionDto>(json);
-
-                if (prediction == null) {
-                    throw new Exception("");
-                }
-
-                return Ok(prediction.Prediction);
+                return Ok(json);
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

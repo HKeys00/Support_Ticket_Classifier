@@ -1,0 +1,67 @@
+﻿@using Client.Components.Common;        
+@using Shared.Enums.Ticket;
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit" FormName="@FormName">
+    <ObjectGraphDataAnnotationsValidator />
+    <div class="body">
+        <label>
+            Ticket Type
+            <InputSelect id="type" TValue="TicketType" @bind-Value="Model.Type">
+                <option value="@TicketType.ProductInquiry">Product Inquiry</option>
+                <option value="@TicketType.RefundRequest">Refund Request</option>
+                <option value="@TicketType.CancellationRequest">Cancellation Request</option>
+                <option value="@TicketType.BillingInquiry">Billing Inquiry</option>
+                <option value="@TicketType.TechnicalIssue">Technical Issue</option>
+            </InputSelect>
+        </label>
+
+        <label>
+            Subject:
+            <InputText id="subject" @bind-Value="Model.Subject" />
+            <ValidationMessage For="@(() => Model.Subject)" />
+        </label>
+
+        <div class="customer-details">
+            <h5>Customer Details</h5>
+            <label>
+                Email:
+                <InputText @bind-Value="Model.Customer.Email" />
+                <ValidationMessage For="@(() => Model.Customer.Email)" />
+            </label>
+            <label>
+                Name:
+                <InputText @bind-Value="Model.Customer.Name" />
+                <ValidationMessage For="@(() => Model.Customer.Name)" />
+            </label>
+        </div>
+
+        <div class="ticket-details">
+            <label>
+                Channel:
+                <InputSelect @bind-Value="Model.Channel">
+                    <option value="@TicketChannel.SocialMedia">Social Media</option>
+                    <option value="@TicketChannel.Email">Email</option>
+                    <option value="@TicketChannel.Phone">Phone</option>
+                    <option value="@TicketChannel.Chat">Chat</option>
+                </InputSelect>
+            </label>
+
+            <label>
+                Product:
+                <InputText @bind-Value="Model.ProductPurchased" />
+                <ValidationMessage For="@(() => Model.ProductPurchased)" />
+            </label>
+
+            <label>
+                Date Of Purchase:
+                <InputDate @bind-Value="Model.DateOfPurchase" />
+                <ValidationMessage For="@(() => Model.DateOfPurchase)" />
+            </label>
+
+            <label>
+                Description:
+                <InputTextArea @bind-Value="Model.Description" />
+                <ValidationMessage For="@(() => Model.Description)" />
+            </label>
+        </div>
+    </div>
+</EditForm>

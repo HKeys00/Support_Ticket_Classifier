@@ -1,5 +1,6 @@
 ﻿using Shared.Enums.Ticket;
 using Shared.Models;
+using System.Text.Json;
 
 namespace Client.Services
 {
@@ -33,8 +34,8 @@ namespace Client.Services
         /// Gets a prediction of the ticket priority from the model.
         /// </summary>
         /// <param name="ticket">The ticket data to use.</param>
-        /// <returns>The predicted priority.</returns>
-        public async Task<TicketPriority> GetPriorityPrediction(Ticket ticket)
+        /// <returns>The prediction from the model.</returns>
+        public async Task<Prediction?> GetPriorityPrediction(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
             var response = await client.PostAsJsonAsync<Ticket>("model", ticket);
@@ -42,12 +43,12 @@ namespace Client.Services
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                var prediction = int.Parse(result);
-                return (TicketPriority)prediction;
+                var prediction = JsonSerializer.Deserialize<Prediction>(result);
+                return prediction;
             }
 
             //TODO Proper error handling
-            return TicketPriority.Low;
+            return null;
         }
 
         #endregion
