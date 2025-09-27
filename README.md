@@ -63,14 +63,14 @@ The model is created in the following kaggle notebook:
 - [x] View tickets in columns by priority  
 - [x] Update tickets (basic edit form)  
 - [x] Query ML model for predicted priority on ticket creation  
-- [ ] Manually update priority and log correction  
+- [x] Manually update priority and log correction  
 - [x] Drag & drop tickets between columns (updates DB)  
 
 ---
 
 ### v1.1 – Polish (Usability + Feedback Loop)
-- [ ] Feed manual corrections back into a feedback dataset  
-- [ ] “Retrain model” button (admin-only) to reload ML with corrections  
+- [x] Feed manual corrections back into a feedback dataset  
+- [ ] “Retrain model” button to reload ML with corrections  
 - [ ] Display ML prediction confidence (probabilities per class)  
 - [ ] Show training metrics (accuracy, precision/recall) in an Admin Dashboard  
 - [ ] Add UI polish:
