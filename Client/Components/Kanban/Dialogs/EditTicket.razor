@@ -4,16 +4,24 @@
     <div class="header">
         <h1>Edit Ticket</h1>
     </div>
-    <TicketForm Model="_ticketModel" OnValidSubmit="Submit" FormName="NewTicket">
+    <TicketForm Model="_ticketModel" OnValidSubmit="Submit" FormName="edit-ticket-form">
     </TicketForm>
     <LoadingSpinner IsVisible="@_isLoading" />
     <div class="footer">
         <div class="priority">
-
+            <label>
+                Ticket Priority:
+            </label>
+            <InputSelect id="type" TValue="TicketPriority" @bind-Value="_ticketModel.Priority">
+                <option value="@TicketPriority.Low">Low</option>
+                <option value="@TicketPriority.Medium">Medium</option>
+                <option value="@TicketPriority.High">High</option>
+                <option value="@TicketPriority.Critical">Critical</option>
+            </InputSelect>
         </div>
         <div class="action-buttons">
             <button class="cancel" @onclick=Cancel type="button">Cancel</button>
-            <button class="submit" type="submit" form="NewTicket">Save</button>
+            <button class="submit" type="submit" form="edit-ticket-form">Save</button>
         </div>
     </div>
 </Dialog>

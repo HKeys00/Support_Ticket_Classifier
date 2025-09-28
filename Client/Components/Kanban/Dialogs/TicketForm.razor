@@ -1,6 +1,6 @@
 ﻿@using Client.Components.Common;        
 @using Shared.Enums.Ticket;
-<EditForm Model="Model" OnValidSubmit="OnValidSubmit" FormName="@FormName">
+<EditForm Model="Model" OnValidSubmit="@OnValidSubmit" FormName="@FormName" id="@FormName">
     <ObjectGraphDataAnnotationsValidator />
     <div class="body">
         <label>

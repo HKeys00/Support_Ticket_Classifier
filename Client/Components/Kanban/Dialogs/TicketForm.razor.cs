@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 namespace Client.Components.Kanban.Dialogs
 {
     public partial class TicketForm

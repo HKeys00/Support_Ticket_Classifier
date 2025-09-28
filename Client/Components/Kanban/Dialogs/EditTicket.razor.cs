@@ -1,5 +1,6 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Shared.Enums.Ticket;
 using Shared.Helpers;
 
@@ -10,7 +11,6 @@ namespace Client.Components.Kanban.Dialogs
         #region Fields
 
         private Shared.Models.Ticket _ticketModel;
-        private bool _isNew;
         private bool _isLoading;
 
         #endregion
@@ -33,7 +33,7 @@ namespace Client.Components.Kanban.Dialogs
         /// Gets or sets the ticket model data to be supplied by the form.
         /// </summary>
         [Parameter]
-        public required Shared.Models.Ticket? Ticket { get; set; }
+        public required Shared.Models.Ticket Ticket { get; set; }
 
         /// <summary>
         /// Gets or sets if the ticket form dialog is currently visible.
@@ -51,7 +51,7 @@ namespace Client.Components.Kanban.Dialogs
         /// Gets or sets the event callback to trigger when a ticket has been updated.
         /// </summary>
         [Parameter]
-        public required EventCallback<Shared.Models.Ticket?> TicketChanged { get; set; }
+        public required EventCallback<Shared.Models.Ticket> TicketChanged { get; set; }
 
         #endregion
 
@@ -66,7 +66,6 @@ namespace Client.Components.Kanban.Dialogs
             }
 
             _isLoading = false;
-            _isNew = true;
             _ticketModel = new()
             {
                 Customer = new Shared.Models.Customer(),
@@ -74,12 +73,7 @@ namespace Client.Components.Kanban.Dialogs
                 Type = TicketType.BillingInquiry,
                 Status = TicketStatus.Open,
             };
-
-            if (Ticket != null)
-            {
-                _isNew = false;
-                TicketHelper.CopyTicket(_ticketModel, Ticket);
-            }
+            TicketHelper.CopyTicket(_ticketModel, Ticket);
         }
 
         /// <summary>
@@ -88,39 +82,8 @@ namespace Client.Components.Kanban.Dialogs
         private async Task Submit()
         {
             _isLoading = true;
-            if (_isNew)
-            {
-                await CreateTicket();
-            }
-            else
-            {
-                await UpdateTicket();
-            }
+            await UpdateTicket();            
             _isLoading = false;
-        }
-
-        /// <summary>
-        /// Requests for a new ticket to be created in the database.
-        /// </summary>
-        private async Task CreateTicket()
-        {
-            var prediction = await ModelService.GetPriorityPrediction(_ticketModel);
-
-            if (prediction == null)
-            {
-                _ticketModel.Priority = TicketPriority.Low;
-                //Handle lack of prediction,
-            }
-            else
-            {
-                _ticketModel.Priority = (TicketPriority)prediction.Value;
-            }
-
-            var response = await TicketService.CreateTicketAsync(_ticketModel);
-            if (response != -1)
-            {
-                StateHasChanged();
-            }
         }
 
         /// <summary>
