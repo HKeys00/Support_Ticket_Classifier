@@ -25,7 +25,7 @@ namespace Shared.Models
         /// Gets or sets the unique identifier for the <see cref="Customer"/> who raised
         /// this ticket.
         /// </summary>
-        [ForeignKey("Customer")]
+        [ForeignKey(nameof(Customer))]
         public int CustomerId { get; set; }
 
         /// <summary>

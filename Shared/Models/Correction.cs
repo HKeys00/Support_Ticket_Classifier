@@ -17,7 +17,7 @@ namespace Shared.Models
         /// <summary>
         /// Gets or sets the id of the <see cref="Ticket"/> that has been corrected.
         /// </summary>
-        [Required, ForeignKey("TicketId")]
+        [Required, ForeignKey(nameof(Ticket))]
         public int TicketId { get; set; }
 
         /// <summary>
