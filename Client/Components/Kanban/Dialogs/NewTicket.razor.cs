@@ -1,7 +1,6 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
 using Shared.Enums.Ticket;
-using Shared.Helpers;
 
 namespace Client.Components.Kanban.Dialogs
 {
@@ -27,6 +26,12 @@ namespace Client.Components.Kanban.Dialogs
         /// </summary>
         [Inject]
         public required ModelService ModelService { get; set; }
+
+        /// <summary>
+        /// Gets or sets the injected <see cref="ToastService"/> instance.
+        /// </summary>
+        [Inject]
+        public required ToastService ToastService { get; set; }
 
         /// <summary>
         /// Gets or sets if the ticket form dialog is currently visible.
@@ -88,7 +93,7 @@ namespace Client.Components.Kanban.Dialogs
             if (prediction == null)
             {
                 _ticketModel.Priority = TicketPriority.Low;
-                //Handle lack of prediction,
+                //TODO Handle lack of prediction,
             }
             else
             {
@@ -98,8 +103,20 @@ namespace Client.Components.Kanban.Dialogs
             var response = await TicketService.CreateTicketAsync(_ticketModel);
             if (response != -1)
             {
+                await ToastService.ShowToast(new Model.ToastMessage()
+                {
+                    Title= "New Ticket Created!",
+                    Message = $"This ticket has been assigned a priority of {(TicketPriority)prediction.Value} with a confidence level of {prediction.Confidence[prediction.Value]}%",
+                    Level = Enums.ToastLevel.Success,
+                    DurationMs = 3000,
+                });
+
+                await IsVisibleChanged.InvokeAsync(false);
                 StateHasChanged();
+                return;
             }
+
+            //TODO: Handle Error
         }
 
         /// <summary>
