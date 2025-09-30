@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
-using System.Threading.Channels;
 
 namespace Api.Controllers
 {
@@ -15,6 +14,7 @@ namespace Api.Controllers
     {
         #region Fields
 
+        private readonly ILogger<TicketController> _logger;
         private readonly ApplicationDbContext _context;
 
         #endregion
@@ -24,9 +24,11 @@ namespace Api.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="TicketController"/> class.
         /// </summary>
+        /// <param name="logger">The logger instance.</param>
         /// <param name="context">The database context.</param>
-        public TicketController(ApplicationDbContext context)
+        public TicketController(ILogger<TicketController> logger, ApplicationDbContext context)
         {
+            _logger = logger;
             _context = context;
         }
 
@@ -44,15 +46,27 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Ticket>> GetTicket(int id)
         {
-            var ticket = await _context.Tickets
-                .Include(t => t.Customer)
-                .FirstOrDefaultAsync(t => t.Id == id);
-            if (ticket == null)
+            try
             {
-                return NotFound();
-            }
+                var ticket = await _context.Tickets
+                    .Include(t => t.Customer)
+                    .FirstOrDefaultAsync(t => t.Id == id);
+                if (ticket == null)
+                {
+                    _logger.LogWarning($"Ticket with id {id} not found");
+                    return NotFound(new { message = $"Ticket with id {id} not found." });
+                }
 
-            return Ok(ticket);
+                _logger.LogInformation("Fetched ticket with id {TicketId}", id);
+                return Ok(ticket);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching ticket with id {TicketId}", id);
+                return Problem(
+                    detail: $"An unexpected error occurred while fetching a ticket with id {id}: {ex.Message}",
+                    statusCode: StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -63,11 +77,19 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<Ticket>>> GetAllTickets()
         {
-            var tickets = await _context.Tickets
-                .Include(t => t.Customer)
-                .ToListAsync();
-
-            return Ok(tickets);
+            try
+            {
+                var tickets = await _context.Tickets
+                    .Include(t => t.Customer)
+                    .ToListAsync();
+                return Ok(tickets);
+            }
+            catch (Exception ex)
+            {
+                return Problem(
+                    detail: $"An unexpected error occured while fetching all tickets: {ex.Message}",
+                    statusCode: StatusCodes.Status500InternalServerError);
+            }
         }
 
         /// <summary>
@@ -77,7 +99,6 @@ namespace Api.Controllers
         /// <returns>The id of the newly created ticket.</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<int>> CreateTicket([FromBody] Ticket ticket)
         {
             try
@@ -85,9 +106,11 @@ namespace Api.Controllers
                 await _context.Tickets.AddAsync(ticket);
                 await _context.SaveChangesAsync();
                 return Ok(ticket.Id);
-            } catch
+            } catch (Exception ex)
             {
-                return BadRequest(-1);
+                return Problem(
+                    detail: $"An unexpected error occured while fetching all tickets: {ex.Message}",
+                    statusCode: StatusCodes.Status500InternalServerError);
             }
         }
 
@@ -101,7 +124,7 @@ namespace Api.Controllers
                 var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.Id == ticket.Id);
                 if (existingTicket == null)
                 {
-                    return BadRequest();
+                    return NotFound(new { message = $"Ticket with id {ticket.Id} not found." });
                 }
 
 
@@ -135,10 +158,13 @@ namespace Api.Controllers
 
                 existingTicket.Priority = ticket.Priority;
                 await _context.SaveChangesAsync();
-            return Ok();
-            } catch {
-                //TODO Hanndle API ERROR
-                return BadRequest();
+
+                return Ok();
+            } catch (Exception ex) {
+                return Problem(
+                    detail: "An unexpected error occurred while updating the ticket.",
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
             }
         }
         #endregion

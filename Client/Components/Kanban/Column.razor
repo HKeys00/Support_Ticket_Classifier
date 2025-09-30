@@ -6,11 +6,21 @@
         <p class="column-ticket-count">@_ticketCount</p>
     </div>
     <div class="tickets">
-        @foreach(var t in Tickets) 
+        @if (Tickets.Count == 0)
         {
-            var ticket = t;
-            <Ticket @bind-Data="ticket"/>
+            <div class="no-tickets">
+                NO TICKETS YET
+            </div>
         }
+        else
+        {
+            @foreach (var t in Tickets)
+            {
+                var ticket = t;
+                <Ticket @bind-Data="ticket"/>
+            }
+        }
+        
     </div>
     <div class="column-footer">
         @if (CanAddTickets)

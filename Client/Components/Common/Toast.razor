@@ -3,7 +3,10 @@
     {
         <div class="toast @GetCssClass(toast.Level)">
             <h6>@toast.Title</h6>
-            <span>@toast.Message</span>
+            @if (!string.IsNullOrEmpty(toast.Message))
+            {
+                <span>@toast.Message</span>
+            }
         </div>
     }
 </div>

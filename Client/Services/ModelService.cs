@@ -35,7 +35,7 @@ namespace Client.Services
         /// </summary>
         /// <param name="ticket">The ticket data to use.</param>
         /// <returns>The prediction from the model.</returns>
-        public async Task<Prediction?> GetPriorityPrediction(Ticket ticket)
+        public async Task<Prediction> GetPriorityPrediction(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
             var response = await client.PostAsJsonAsync<Ticket>("model", ticket);

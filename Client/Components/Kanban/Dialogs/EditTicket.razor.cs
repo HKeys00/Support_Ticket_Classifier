@@ -18,6 +18,12 @@ namespace Client.Components.Kanban.Dialogs
         #region Properties
 
         /// <summary>
+        /// Gets or sets the injected <see cref="ToastService"/> instance.
+        /// </summary>
+        [Inject]
+        public required ToastService ToastService { get; set; }
+
+        /// <summary>
         /// Gets or sets the injected <see cref="TicketService"/> instance.
         /// </summary>
         [Inject]
@@ -91,11 +97,34 @@ namespace Client.Components.Kanban.Dialogs
         /// </summary>
         private async Task UpdateTicket()
         {
-            await TicketService.UpdateTicketAsync(_ticketModel);
-            TicketHelper.CopyTicket(Ticket, _ticketModel);
+            try
+            {
+                await TicketService.UpdateTicketAsync(_ticketModel);
+                TicketHelper.CopyTicket(Ticket, _ticketModel);
 
-            await TicketChanged.InvokeAsync(Ticket);
-            await IsVisibleChanged.InvokeAsync(false);
+                await TicketChanged.InvokeAsync(Ticket);
+                await IsVisibleChanged.InvokeAsync(false);
+
+                await ToastService.ShowToast(new Model.ToastMessage()
+                {
+                    Title = "Ticket Updated!",
+                    Message = "",
+                    Level = Enums.ToastLevel.Success,
+                    DurationMs = 5000,
+                });
+            }
+            catch (Exception ex)
+            {
+                await ToastService.ShowToast(new Model.ToastMessage()
+                {
+                    Title = "Failed to update ticket.",
+                    Message = $"{ex.Message}",
+                    Level = Enums.ToastLevel.Error,
+                    DurationMs = 5000,
+                });
+
+                await IsVisibleChanged.InvokeAsync(false);
+            }
         }
 
         /// <summary>

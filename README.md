@@ -73,10 +73,10 @@ The model is created in the following kaggle notebook:
 - [ ] “Retrain model” button to reload ML with corrections  
 - [ ] Display ML prediction confidence (probabilities per class)  
 - [ ] Show training metrics (accuracy, precision/recall) in an Admin Dashboard  
-- [ ] Add UI polish:
-  - [ ] Confirmation toasts (success/error)  
-  - [ ] Loading indicators while saving/querying model  
-  - [ ] Empty states (“No tickets yet”)  
+- [x] Add UI polish:
+  - [x] Confirmation toasts (success/error)  
+  - [x] Loading indicators while saving/querying model  
+  - [x] Empty states (“No tickets yet”)  
 - [ ] Error handling for API calls (friendly UI + retry)  
 
 ---
