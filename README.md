@@ -78,7 +78,7 @@ The model is created in the following kaggle notebook:
   - [x] Loading indicators while saving/querying model  
   - [x] Empty states (“No tickets yet”)  
 - [ ] Error handling for API calls (friendly UI + retry)  
-
+- [ ] Implement Zero-Shot Classification when the model prediction is low (https://huggingface.co/facebook/bart-large-mnli)
 ---
 
 ### v1.2 – Production Ready (DevOps + Reliability)
@@ -88,7 +88,6 @@ The model is created in the following kaggle notebook:
 - [ ] Enable monitoring/logging with Azure Application Insights  
 - [ ] Add audit trail (ticket history: who changed priority, when, old → new)  
 - [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)  
-
 ---
 
 ### v1.3 – Enhancements
