@@ -17,7 +17,7 @@
                 var closedTickets = _tickets.Where(t => t.Status == TicketStatus.Closed).ToList();
             }
 
-            <Column Name="OPEN" Tickets="openTickets" ColumnStatus="TicketStatus.Open" AddTicketsEvent="OnNewTicketAdded" CanAddTickets/>
+            <Column Name="OPEN" Tickets="openTickets" ColumnStatus="TicketStatus.Open" AddTicketsEvent="() => _newTicketDialogShowing = true" CanAddTickets />
             <Column Name="AWAITING CUSTOMER RESPONSE" Tickets="responeTickets" ColumnStatus="TicketStatus.PendingCustomerResponse"/>
             <Column Name="CLOSED" Tickets="closedTickets" ColumnStatus="TicketStatus.Closed"/>
         </div>
@@ -26,4 +26,4 @@
 </div>
 
 <EditTicket @bind-IsVisible="_existingTicketDialogShowing" Ticket="_selectedTicket" />
-<NewTicket @bind-IsVisible="_newTicketDialogShowing" />
+<NewTicket @bind-IsVisible="_newTicketDialogShowing" TicketCreated="OnNewTicketAdded"/>

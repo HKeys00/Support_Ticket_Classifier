@@ -47,10 +47,28 @@ namespace Client.Components.Kanban.Dialogs
         public required EventCallback<bool> IsVisibleChanged { get; set; }
 
         /// <summary>
-        /// Gets or sets the event callback to trigger when a ticket has been updated.
+        /// Gets or sets the event callback to trigger when a ticket has been created.
         /// </summary>
         [Parameter]
-        public required EventCallback<Shared.Models.Ticket?> TicketChanged { get; set; }
+        public required EventCallback<Shared.Models.Ticket> TicketCreated { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewTicket"/> component.
+        /// </summary>
+        public NewTicket()
+        {
+            _ticketModel = new()
+            {
+                Customer = new Customer(),
+                DateOfPurchase = DateTime.Today,
+                Type = TicketType.BillingInquiry,
+                Status = TicketStatus.Open,
+            };
+        }
 
         #endregion
 
@@ -95,6 +113,33 @@ namespace Client.Components.Kanban.Dialogs
             if (predictionResult.Success)
             {
                 _ticketModel.Priority = (TicketPriority)predictionResult.Prediction!.Value;
+            } 
+
+            var response = await TicketService.CreateTicketAsync(_ticketModel);
+            if (!response.Success)
+            {
+                await ToastService.ShowToast(new Model.ToastMessage()
+                {
+                    Title = "Failed to create ticket!",
+                    Message = $"An error occured: {response.ErrorMessage}",
+                    Level = Enums.ToastLevel.Error,
+                    DurationMs = 5000,
+                });
+
+                return;
+            }
+
+            if (predictionResult.Success)
+            {
+                var prediction = predictionResult.Prediction!;
+                string confidence = (prediction.Confidence[prediction.Value] * 100).ToString("F0");
+                await ToastService.ShowToast(new Model.ToastMessage()
+                {
+                    Title = "New Ticket Created!",
+                    Message = $"This ticket has been assigned a priority of {(TicketPriority)prediction.Value} with a confidence level of {confidence}%",
+                    Level = Enums.ToastLevel.Success,
+                    DurationMs = 5000,
+                });
             } else
             {
                 await ToastService.ShowToast(new Model.ToastMessage()
@@ -105,30 +150,8 @@ namespace Client.Components.Kanban.Dialogs
                     DurationMs = 5000,
                 });
             }
-
-
-            var response = await TicketService.CreateTicketAsync(_ticketModel);
+            await TicketCreated.InvokeAsync(_ticketModel);
             await IsVisibleChanged.InvokeAsync(false);
-
-            string confidence = (prediction.Confidence[prediction.Value] * 100).ToString("F0");
-            await ToastService.ShowToast(new Model.ToastMessage()
-            {
-                Title = "New Ticket Created!",
-                Message = $"This ticket has been assigned a priority of {(TicketPriority)prediction.Value} with a confidence level of {confidence}%",
-                Level = Enums.ToastLevel.Success,
-                DurationMs = 5000,
-            });
-
-                await ToastService.ShowToast(new Model.ToastMessage()
-                {
-                    Title = "Failed to create ticket!",
-                    Message = $"An error occured: {ex.Message}",
-                    Level = Enums.ToastLevel.Error,
-                    DurationMs = 5000,
-                });
-
-                await IsVisibleChanged.InvokeAsync(false);
-            
 
             StateHasChanged();
         }

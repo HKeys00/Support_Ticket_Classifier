@@ -89,9 +89,9 @@ namespace Client.Components.Pages
         /// Adds a ticket to the database.
         /// </summary>
         /// <param name="ticket">The details of the new ticket.</param>
-        private void OnNewTicketAdded()
+        private void OnNewTicketAdded(Ticket Ticket)
         {
-            _newTicketDialogShowing = true;
+            _tickets.Add(Ticket);
         }
 
         /// <summary>

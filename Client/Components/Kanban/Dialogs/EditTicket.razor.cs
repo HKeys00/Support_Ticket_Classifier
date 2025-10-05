@@ -1,8 +1,8 @@
 ﻿using Client.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Shared.Enums.Ticket;
 using Shared.Helpers;
+using Shared.Models;
 
 namespace Client.Components.Kanban.Dialogs
 {
@@ -61,6 +61,20 @@ namespace Client.Components.Kanban.Dialogs
 
         #endregion
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EditTicket"/> component.
+        /// </summary>
+        public EditTicket()
+        {
+            _ticketModel = new()
+            {
+                Customer = new Customer(),
+                DateOfPurchase = DateTime.Today,
+                Type = TicketType.BillingInquiry,
+                Status = TicketStatus.Open,
+            };
+        }
+
         #region Methods
 
         /// <inheritdoc />
@@ -74,7 +88,7 @@ namespace Client.Components.Kanban.Dialogs
             _isLoading = false;
             _ticketModel = new()
             {
-                Customer = new Shared.Models.Customer(),
+                Customer = new Customer(),
                 DateOfPurchase = DateTime.Today,
                 Type = TicketType.BillingInquiry,
                 Status = TicketStatus.Open,
@@ -97,34 +111,31 @@ namespace Client.Components.Kanban.Dialogs
         /// </summary>
         private async Task UpdateTicket()
         {
-            try
-            {
-                await TicketService.UpdateTicketAsync(_ticketModel);
-                TicketHelper.CopyTicket(Ticket, _ticketModel);
-
-                await TicketChanged.InvokeAsync(Ticket);
-                await IsVisibleChanged.InvokeAsync(false);
-
-                await ToastService.ShowToast(new Model.ToastMessage()
-                {
-                    Title = "Ticket Updated!",
-                    Message = "",
-                    Level = Enums.ToastLevel.Success,
-                    DurationMs = 5000,
-                });
-            }
-            catch (Exception ex)
+            var response = await TicketService.UpdateTicketAsync(_ticketModel);
+            if (!response.Success)
             {
                 await ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "Failed to update ticket.",
-                    Message = $"{ex.Message}",
+                    Message = $"{response.ErrorMessage}",
                     Level = Enums.ToastLevel.Error,
                     DurationMs = 5000,
                 });
-
-                await IsVisibleChanged.InvokeAsync(false);
+                return;
             }
+
+            TicketHelper.CopyTicket(Ticket, _ticketModel);
+
+            await TicketChanged.InvokeAsync(Ticket);
+            await IsVisibleChanged.InvokeAsync(false);
+
+            await ToastService.ShowToast(new Model.ToastMessage()
+            {
+                Title = "Ticket Updated!",
+                Message = "",
+                Level = Enums.ToastLevel.Success,
+                DurationMs = 5000,
+            });
         }
 
         /// <summary>
@@ -132,7 +143,6 @@ namespace Client.Components.Kanban.Dialogs
         /// </summary>
         private void Cancel()
         {
-            Ticket = null;
             IsVisibleChanged.InvokeAsync(false);
         }
 
