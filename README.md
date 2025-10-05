@@ -77,8 +77,8 @@ The model is created in the following kaggle notebook:
   - [x] Confirmation toasts (success/error)  
   - [x] Loading indicators while saving/querying model  
   - [x] Empty states (“No tickets yet”)  
-- [ ] Error handling for API calls (friendly UI + retry)  
-- [ ] Implement Zero-Shot Classification when the model prediction is low (https://huggingface.co/facebook/bart-large-mnli)
+- [x] Error handling for API calls (friendly UI + retry)  
+- [ ] Implement HuggingFace model
 ---
 
 ### v1.2 – Production Ready (DevOps + Reliability)
