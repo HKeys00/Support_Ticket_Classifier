@@ -67,7 +67,7 @@ namespace Client.Components.Kanban.Dialogs
             _isLoading = false;
             _ticketModel = new()
             {
-                Customer = new Shared.Models.Customer(),
+                Customer = new Customer(),
                 DateOfPurchase = DateTime.Today,
                 Type = TicketType.BillingInquiry,
                 Status = TicketStatus.Open,
@@ -89,46 +89,36 @@ namespace Client.Components.Kanban.Dialogs
         /// </summary>
         private async Task CreateTicket()
         {
-            Prediction prediction = null;
-            try
+            _ticketModel.Priority = TicketPriority.Low;
+            var predictionResult = await ModelService.GetPriorityPrediction(_ticketModel);
+
+            if (predictionResult.Success)
             {
-                prediction = await ModelService.GetPriorityPrediction(_ticketModel); 
-                _ticketModel.Priority = (TicketPriority)prediction.Value;
-            }
-            catch
+                _ticketModel.Priority = (TicketPriority)predictionResult.Prediction!.Value;
+            } else
             {
-                _ticketModel.Priority = TicketPriority.Low;
+                await ToastService.ShowToast(new Model.ToastMessage()
+                {
+                    Title = "New Ticket Created!",
+                    Message = "A priority prediction couldn't be made so it has been set to low priority",
+                    Level = Enums.ToastLevel.Warning,
+                    DurationMs = 5000,
+                });
             }
 
-            try
+
+            var response = await TicketService.CreateTicketAsync(_ticketModel);
+            await IsVisibleChanged.InvokeAsync(false);
+
+            string confidence = (prediction.Confidence[prediction.Value] * 100).ToString("F0");
+            await ToastService.ShowToast(new Model.ToastMessage()
             {
-                var response = await TicketService.CreateTicketAsync(_ticketModel); 
-                await IsVisibleChanged.InvokeAsync(false);
-                
-                if (prediction == null)
-                {
-                    await ToastService.ShowToast(new Model.ToastMessage()
-                    {
-                        Title = "New Ticket Created!",
-                        Message = "A priority prediction couldn't be made so it has been set to low priority",
-                        Level = Enums.ToastLevel.Warning,
-                        DurationMs = 5000,
-                    });
-                }
-                else
-                {
-                    string confidence = (prediction.Confidence[prediction.Value] * 100).ToString("F0");
-                    await ToastService.ShowToast(new Model.ToastMessage()
-                    {
-                        Title = "New Ticket Created!",
-                        Message = $"This ticket has been assigned a priority of {(TicketPriority)prediction.Value} with a confidence level of {confidence}%",
-                        Level = Enums.ToastLevel.Success,
-                        DurationMs = 5000,
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
+                Title = "New Ticket Created!",
+                Message = $"This ticket has been assigned a priority of {(TicketPriority)prediction.Value} with a confidence level of {confidence}%",
+                Level = Enums.ToastLevel.Success,
+                DurationMs = 5000,
+            });
+
                 await ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "Failed to create ticket!",
@@ -138,7 +128,7 @@ namespace Client.Components.Kanban.Dialogs
                 });
 
                 await IsVisibleChanged.InvokeAsync(false);
-            }
+            
 
             StateHasChanged();
         }

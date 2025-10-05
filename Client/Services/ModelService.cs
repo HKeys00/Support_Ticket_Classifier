@@ -1,5 +1,5 @@
-﻿using Shared.Enums.Ticket;
-using Shared.Models;
+﻿using Shared.Models;
+using Shared.Models.Result;
 using System.Text.Json;
 
 namespace Client.Services
@@ -11,7 +11,7 @@ namespace Client.Services
     {
         #region Fields
 
-        IHttpClientFactory _clientFactory;
+        private readonly IHttpClientFactory _clientFactory;
 
         #endregion
 
@@ -35,20 +35,24 @@ namespace Client.Services
         /// </summary>
         /// <param name="ticket">The ticket data to use.</param>
         /// <returns>The prediction from the model.</returns>
-        public async Task<Prediction> GetPriorityPrediction(Ticket ticket)
+        public async Task<PredictionResult> GetPriorityPrediction(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PostAsJsonAsync<Ticket>("model", ticket);
+            var response = await client.PostAsJsonAsync("model", ticket);
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
                 var prediction = JsonSerializer.Deserialize<Prediction>(result);
-                return prediction;
+
+                return PredictionResult.FromSuccess(prediction!);
             }
 
-            //TODO Proper error handling
-            return null;
+            var error = await response.Content.ReadAsStringAsync();
+            return PredictionResult.FromError(
+                $"Model API returned {(int)response.StatusCode} - {error}",
+                response.StatusCode
+            );
         }
 
         #endregion

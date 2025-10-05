@@ -57,12 +57,12 @@ namespace Api.Controllers
                     return NotFound(new { message = $"Ticket with id {id} not found." });
                 }
 
-                _logger.LogInformation("Fetched ticket with id {TicketId}", id);
+                _logger.LogInformation($"Fetched ticket with id {id}");
                 return Ok(ticket);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error fetching ticket with id {TicketId}", id);
+                _logger.LogError(ex, $"Error fetching ticket with id {id}");
                 return Problem(
                     detail: $"An unexpected error occurred while fetching a ticket with id {id}: {ex.Message}",
                     statusCode: StatusCodes.Status500InternalServerError);
@@ -162,7 +162,7 @@ namespace Api.Controllers
                 return Ok();
             } catch (Exception ex) {
                 return Problem(
-                    detail: "An unexpected error occurred while updating the ticket.",
+                    detail: $"An unexpected error occurred while updating the ticket: {ex.Message}",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }

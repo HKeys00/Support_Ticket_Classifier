@@ -40,6 +40,24 @@ namespace Client.Components.Pages
         [Inject]
         public required TicketDragService TicketDragService { get; set; }
 
+        /// <summary>
+        /// Gets or sets the injected <see cref="ToastService"/> instance.
+        /// </summary>
+        [Inject]
+        public required ToastService ToastService { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Tickets"/> page.
+        /// </summary>
+        public Tickets()
+        {
+            _tickets = [];
+        }
+
         #endregion
 
         #region Methods
@@ -49,9 +67,22 @@ namespace Client.Components.Pages
         {
             CurrentTicketService.OnTicketChange += OnTicketSelected;
             TicketDragService.TicketDragged += OnTicketDragged;
-            _tickets = new List<Ticket>();
+            _tickets = [];
 
-            _tickets = await TicketService.GetTicketsAsync();
+            var fetch = await TicketService.GetTicketsAsync();
+            if (fetch.Success)
+            {
+                _tickets = fetch.TicketData!;
+            } else
+            {
+                await ToastService.ShowToast(new ToastMessage()
+                {
+                    Title = "Could not fetch existing tickets!",
+                    Message = $"An error occured fetching tickets from the database: {fetch.ErrorMessage}",
+                    Level = Enums.ToastLevel.Error,
+                    DurationMs = 5000,
+                });
+            }
         }
 
         /// <summary>
@@ -72,21 +103,32 @@ namespace Client.Components.Pages
             _selectedTicket = _tickets.FirstOrDefault(t => t.Id == e.Id);
             if (_selectedTicket == null)
             {
-                //TODO Hadnle Error
+                await ToastService.ShowToast(new ToastMessage()
+                {
+                    Title = "An error occured!",
+                    Message = $"Unable to drag ticket because it doesn't exist.",
+                    Level = Enums.ToastLevel.Error,
+                    DurationMs = 5000,
+                });
                 return;
             }
 
             _selectedTicket.Status = (TicketStatus)e.TicketStatus;
 
-            try
+            var response = await TicketService.UpdateTicketAsync(_selectedTicket);
+            if (!response.Success)
             {
-                await TicketService.UpdateTicketAsync(_selectedTicket);
+                await ToastService.ShowToast(new ToastMessage()
+                {
+                    Title = "An error occured!",
+                    Message = response.ErrorMessage!,
+                    Level = Enums.ToastLevel.Error,
+                    DurationMs = 5000,
+                });
+
+                return;
             }
-            catch (Exception ex)
-            {
-                //TODO Errors
-            }
-            
+
             StateHasChanged();
         }
 

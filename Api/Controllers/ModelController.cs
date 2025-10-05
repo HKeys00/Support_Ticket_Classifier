@@ -1,7 +1,5 @@
-﻿using Api.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shared.Models;
-using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -14,6 +12,7 @@ namespace Api.Controllers
     {
         #region Fields
 
+        private readonly ILogger<ModelController> _logger;
         private readonly IHttpClientFactory _clientFactory;
 
         #endregion
@@ -23,9 +22,11 @@ namespace Api.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="ModelController"/> class.
         /// </summary>
-        /// <param name="client"></param>
-        public ModelController(IHttpClientFactory clientFactory)
+        /// <param name="logger">The injected logger instance.</param>
+        /// <param name="clientFactory">The injected client factory instance.</param>
+        public ModelController(ILogger<ModelController> logger, IHttpClientFactory clientFactory)
         {
+            _logger = logger;
             _clientFactory = clientFactory;
         }
 
@@ -49,10 +50,21 @@ namespace Api.Controllers
             {
                 var response = await client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
                 var json = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("Model API returned error: {Status} - {Message}", response.StatusCode, json);
+                    return StatusCode((int)response.StatusCode, json);
+                }
+
+                _logger.LogInformation("Successfully fetched prediction from model");
                 return Ok(json);
             } catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                _logger.LogError(ex, "Error fetching prediction from model.");
+                return Problem(
+                    detail: $"An unexpected error occured while fetching priority prediction from model: {ex.Message}",
+                    statusCode: StatusCodes.Status500InternalServerError);
             }
         }
 

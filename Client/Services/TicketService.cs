@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
-using Shared.Models;
+﻿using Shared.Models;
+using Shared.Models.Result;
 
 namespace Client.Services
 {
@@ -10,7 +10,7 @@ namespace Client.Services
     {
         #region Fields
 
-        IHttpClientFactory _clientFactory;
+        private readonly IHttpClientFactory _clientFactory;
 
         #endregion
 
@@ -33,49 +33,66 @@ namespace Client.Services
         /// Fetches all the tickets from the database.
         /// </summary>
         /// <returns>A list of tickets.</returns>
-        public async Task<List<Ticket>> GetTicketsAsync()
+        public async Task<TicketResult<List<Ticket>>> GetTicketsAsync()
         {
-            var tickets = new List<Ticket>();
-
             using var client = _clientFactory.CreateClient("Api");
+            var response = await client.GetAsync("ticket");
 
-            var response = await client.GetFromJsonAsync<List<Ticket>>("ticket");
-            if (response != null)
+            if (response.IsSuccessStatusCode)
             {
-                tickets = response;
+                var tickets = await response.Content.ReadFromJsonAsync<List<Ticket>>();
+                return TicketResult.FromSuccess(tickets!);
             }
 
-            return tickets;
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            return TicketResult.FromError<List<Ticket>>(
+                $"API returned {(int)response.StatusCode}: {errorMessage}",
+                response.StatusCode
+            );
         }
 
         /// <summary>
         /// Posts a new ticket to the database.
         /// </summary>
         /// <param name="ticket">The ticket data.</param>
-        public async Task<int> CreateTicketAsync(Ticket ticket)
+        public async Task<TicketResult<int>> CreateTicketAsync(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
             var response = await client.PostAsJsonAsync("ticket", ticket);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                return 1; 
-                //TODO: Proper error handling.
+                var ticketId = await response.Content.ReadFromJsonAsync<int>();
+                return TicketResult.FromSuccess(ticketId);
             }
 
-            var ticketId = await response.Content.ReadFromJsonAsync<int>();
-            return ticketId;
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            return TicketResult.FromError<int>(
+                $"API returned {(int)response.StatusCode}: {errorMessage}",
+                response.StatusCode
+            );
         }
 
-        public async Task UpdateTicketAsync(Ticket ticket)
+        /// <summary>
+        /// Updates a ticket in the database.
+        /// </summary>
+        /// <param name="ticket">The ticket data to update.</param>
+        /// <returns>The result of the update.</returns>
+        public async Task<TicketResult<int>> UpdateTicketAsync(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
             var response = await client.PutAsJsonAsync("ticket", ticket);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                //TODO: Proper error handling.
+                return TicketResult.FromSuccess(0);
             }
+
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            return TicketResult.FromError<int>(
+                $"API returned {(int)response.StatusCode}: {errorMessage}",
+                response.StatusCode
+            );
         }
 
         #endregion
