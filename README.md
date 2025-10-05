@@ -72,7 +72,6 @@ The model is created in the following kaggle notebook:
 - [x] Feed manual corrections back into a feedback dataset  
 - [ ] “Retrain model” button to reload ML with corrections  
 - [x] Display ML prediction confidence (probabilities per class)  
-- [ ] Show training metrics (accuracy, precision/recall) in an Admin Dashboard  
 - [x] Add UI polish:
   - [x] Confirmation toasts (success/error)  
   - [x] Loading indicators while saving/querying model  
