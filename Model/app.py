@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import numpy as np
+from retrain import retrain_model
 
 def to_dense_transform(x):
     return x.toarray() if hasattr(x, "toarray") else x
@@ -28,6 +29,17 @@ def predict():
     "Prediction": predicted_class,
     "Confidence": class_confidence
     })
+
+
+@app.route('/retrain', methods=['POST'])
+def retrain():
+    data = request.get_json(force=True)
+    
+
+
+    retrain_model()
+
+    model = joblib.load('ticket_classifier_model.pkl')
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
 
