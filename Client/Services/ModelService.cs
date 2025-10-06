@@ -38,7 +38,7 @@ namespace Client.Services
         public async Task<PredictionResult> GetPriorityPrediction(Ticket ticket)
         {
             using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PostAsJsonAsync("model", ticket);
+            var response = await client.PostAsJsonAsync("model/prediction", ticket);
 
             if (response.IsSuccessStatusCode)
             {
@@ -53,6 +53,14 @@ namespace Client.Services
                 $"Model API returned {(int)response.StatusCode} - {error}",
                 response.StatusCode
             );
+        }
+
+        public async Task RetrainModel()
+        {
+            using var client = _clientFactory.CreateClient("Api");
+            var response = await client.PostAsync("model/retrain", null);
+
+            
         }
 
         #endregion

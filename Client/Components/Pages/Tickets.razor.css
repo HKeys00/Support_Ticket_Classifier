@@ -11,7 +11,10 @@
 
 .header {
     flex: 1;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 10px;
 }
 
     .header.segment {
@@ -28,6 +31,23 @@
             margin: 0;
             font-weight: 600;
         }
+
+        .header.segment button {
+            border: none;
+            background-color: #fff;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+        }
+            .header.segment button h3 {
+                margin: 0;
+                font-weight: 600;
+            }
+
+            .header.segment button img{
+                width: 50px;
+            }
 
 .body {
     justify-content: center;

@@ -29,6 +29,12 @@ namespace Client.Components.Pages
         public required TicketService TicketService { get; set; }
 
         /// <summary>
+        /// Gets or sets the injected <see cref="ModelService"/> instance.
+        /// </summary>
+        [Inject]
+        public required ModelService ModelService { get; set; }
+
+        /// <summary>
         /// Gets or sets the injected <see cref="CurrentTicketService"/> instance.
         /// </summary>
         [Inject]
@@ -92,6 +98,14 @@ namespace Client.Components.Pages
         private void OnNewTicketAdded(Ticket Ticket)
         {
             _tickets.Add(Ticket);
+        }
+
+        /// <summary>
+        /// Handles the request to retrain the model.
+        /// </summary>
+        private async void OnModelRetrainRequested()
+        {
+            await ModelService.RetrainModel();
         }
 
         /// <summary>
