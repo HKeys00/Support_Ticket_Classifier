@@ -86,7 +86,8 @@ The model is created in the following kaggle notebook:
 - [ ] Seed DB with realistic fake tickets for demo  
 - [ ] Enable monitoring/logging with Azure Application Insights  
 - [ ] Add audit trail (ticket history: who changed priority, when, old → new)  
-- [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)  
+- [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)
+- [ ] Integrate with .NET Aspire
 ---
 
 ### v1.3 – Enhancements
