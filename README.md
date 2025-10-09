@@ -71,8 +71,7 @@ The model is created in the following kaggle notebook:
 ### v1.1 – Polish (Usability + Feedback Loop)
 - [x] Feed manual corrections back into a feedback dataset  
 - [ ] “Retrain model” button to reload ML with corrections  
-- [ ] Display ML prediction confidence (probabilities per class)  
-- [ ] Show training metrics (accuracy, precision/recall) in an Admin Dashboard  
+- [x] Display ML prediction confidence (probabilities per class)  
 - [x] Add UI polish:
   - [x] Confirmation toasts (success/error)  
   - [x] Loading indicators while saving/querying model  
@@ -87,7 +86,9 @@ The model is created in the following kaggle notebook:
 - [ ] Seed DB with realistic fake tickets for demo  
 - [ ] Enable monitoring/logging with Azure Application Insights  
 - [ ] Add audit trail (ticket history: who changed priority, when, old → new)  
-- [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)  
+- [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)
+- [ ] Integrate with .NET Aspire
+- [ ] Implement Messaging Queues with either RabbitMQ or Azure Bus
 ---
 
 ### v1.3 – Enhancements
