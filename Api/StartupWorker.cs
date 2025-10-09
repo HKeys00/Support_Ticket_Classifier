@@ -61,52 +61,7 @@ namespace Api
 
         private async Task SeedTicketData(ApplicationDbContext context , CancellationToken cancellationToken)
         {
-            using TextFieldParser parser = new TextFieldParser(Path.Combine(Directory.GetCurrentDirectory(), "Data\\customer_support_tickets.csv"));
-            parser.TextFieldType = FieldType.Delimited;
-            parser.SetDelimiters(",");
-            parser.HasFieldsEnclosedInQuotes = true;
-
-            string[]? headers = parser.ReadFields();
-
-            Dictionary<string, Customer> customers = (await context.Customers.ToListAsync()).ToDictionary(c => c.Email, c => c);
-            while (!parser.EndOfData)
-            {
-                var fields = parser.ReadFields();
-                if (fields == null) break;
-
-                var customerDto = CsvReader.Parse<CustomerDto>(fields, headers);    
-                var ticketDto = CsvReader.Parse<TicketDto>(fields, headers);
-
-                var customer = new Customer()
-                {
-                    Email = customerDto.CustomerEmail,
-                    Name = customerDto.CustomerName,
-                };
-
-                var ticket = new Ticket()
-                {
-                    ProductPurchased = ticketDto.ProductPurchased,
-                    DateOfPurchase = ticketDto.DateOfPurchase,
-                    Type = ticketDto.TicketType,
-                    Subject = ticketDto.TicketSubject,
-                    Description = ticketDto.TicketDescription,
-                    Channel = ticketDto.TicketChannel,
-                    Priority = ticketDto.TicketPriority,
-                    Status = ticketDto.TicketStatus,
-                    DateResolved = ticketDto.TimeToResolution,
-                    Resolution = ticketDto.Resolution
-                };
-
-                if (!customers.TryGetValue(customer.Email, out var c))
-                {
-                    context.Customers.Add(customer);
-                    customers.Add(customer.Email, customer);
-                }
-
-                ticket.Customer = customer;
-            }
-
-            await context.SaveChangesAsync(cancellationToken);
+            //TODO: Seed Data.
         }
 
         #endregion

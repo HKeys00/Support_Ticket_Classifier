@@ -1,4 +1,6 @@
-﻿namespace Shared.Enums.Ticket
+﻿using System.ComponentModel;
+
+namespace Shared.Enums.Ticket
 {
     /// <summary>
     /// Represents the channel through which the ticket was raised.
@@ -6,6 +8,7 @@
     /// </summary>
     public enum TicketChannel
     {
+        [Description("Social media")]
         SocialMedia = 0,
         Chat = 1,
         Email = 2,

@@ -17,12 +17,13 @@ namespace Api.Helpers
         {
             return new TicketDto
             {
-                DateOfPurchase = ticket.DateOfPurchase,
+                ProductPurchased = ticket.ProductPurchased,
+                DateOfPurchase = ticket.DateOfPurchase.ToShortDateString(),
                 TicketType = ticket.Type,
                 TicketSubject = ticket.Subject,
                 TicketDescription = ticket.Description,
                 TicketChannel = ticket.Channel,
-                TicketPriority = ticket.Priority,
+                TicketPriority = ticket.Priority.ToString(),
             };
         }
     }

@@ -1,4 +1,6 @@
 ﻿using Api.Data;
+using Api.Helpers;
+using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums.Ticket;
@@ -85,7 +87,8 @@ namespace Api.Controllers
                 .ToListAsync();
 
             corrections.ForEach(c => c.Ticket.Priority = (TicketPriority)c.CorrectedPriority);
-            var tickets = corrections.Select(c => c.Ticket).ToList();
+            
+            var tickets = corrections.Select(c => TicketHelper.TicketToDto(c.Ticket)).ToList();
             using var client = _clientFactory.CreateClient();
 
             try

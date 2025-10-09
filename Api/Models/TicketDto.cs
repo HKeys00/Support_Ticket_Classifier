@@ -9,11 +9,6 @@ namespace Api.Models
     public record TicketDto
     {
         /// <summary>
-        /// Gets or sets the unique identifier for the <see cref="Ticket"/>.
-        /// </summary>
-        public int TicketId { get; set; }
-
-        /// <summary>
         /// Gets or sets the product purchased by the customer.
         /// </summary>
         public string ProductPurchased { get; set; }
@@ -21,7 +16,7 @@ namespace Api.Models
         /// <summary>
         /// Gets or sets the date when the product was purchased.
         /// </summary>
-        public DateTime DateOfPurchase { get; set; }
+        public string DateOfPurchase { get; set; }
 
         /// <summary>
         /// Gets or sets the type of ticket.
@@ -46,21 +41,6 @@ namespace Api.Models
         /// <summary>
         /// Gets or sets the priority level assigned to the ticket.
         /// </summary>
-        public TicketPriority TicketPriority { get; set; }
-
-        /// <summary>
-        /// Gets or sets that current status of the ticket.
-        /// </summary>
-        public TicketStatus TicketStatus { get; set; }
-
-        /// <summary>
-        /// Gets or sets the date time this ticket was resolved (if it has been).
-        /// </summary>
-        public DateTime? TimeToResolution { get; set; }
-
-        /// <summary>
-        /// Gets or sets the resolution or solution provided for the ticket.
-        /// </summary>
-        public string? Resolution { get; set; }
+        public string TicketPriority { get; set; }
     }
 }

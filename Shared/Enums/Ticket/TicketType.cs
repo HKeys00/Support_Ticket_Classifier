@@ -1,4 +1,6 @@
-﻿namespace Shared.Enums.Ticket
+﻿using System.ComponentModel;
+
+namespace Shared.Enums.Ticket
 {
     /// <summary>
     /// Represents the type of a ticket.
@@ -8,6 +10,8 @@
     public enum TicketType
     {
         None = 0,
+
+        [Description("Billing Inquiry")]
         BillingInquiry = 1,
         CancellationRequest = 2,
         ProductInquiry = 3,

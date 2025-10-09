@@ -46,9 +46,6 @@ for dirname, _, filenames in os.walk('/kaggle/input'):
 
 # In[ ]:
 
-
-from pathlib import Path
-
 ticket = pd.read_csv("customer_support_tickets.csv")
 ticket.drop(columns=['Customer Name', 'Customer Email', 'Customer Age', 'Customer Gender', 'Product Purchased', 'Resolution',
                     'Ticket Status', 'First Response Time', 'Time to Resolution', 'Customer Satisfaction Rating'], inplace=True,  errors='ignore')
@@ -59,8 +56,6 @@ ticket.drop(columns=['Customer Name', 'Customer Email', 'Customer Age', 'Custome
 
 # In[ ]:
 
-
-import numpy as np
 from zlib import crc32
 
 def is_id_in_test_set(identifier, test_ratio):
@@ -195,14 +190,6 @@ y_train_encoded = label_encoder.fit_transform(y_train.values.reshape(-1, 1))
 y_test_encoded = label_encoder.transform(y_test.values.reshape(-1, 1))
 
 pipeline.fit(x_train, y_train_encoded.ravel())
-
-# After trying with multiple Models, we can see that a consistent ~25% accuracy is achieved across all of them. Based on the fact that we only have 4 classes, this is pretty much random guessing, so it's clear that the model is not at fault, it's either the data or the way we are processing it. It seems the data isn't best suited for support ticket priority classification, this should have been reviewed before picking the dataset :( so that's a mistake on my part.
-
-# # DEPLOY MODEL
-# Despite the model not being incredibly accurate I still want to deploy it and comsume it in the accompanying C# application I have build
-
-# In[ ]:
-
 
 import joblib
 joblib.dump(pipeline, "ticket_classifier_model.pkl")

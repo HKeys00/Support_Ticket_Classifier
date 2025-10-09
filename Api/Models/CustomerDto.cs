@@ -10,12 +10,12 @@ namespace Api.Models
         /// <summary>
         /// Gets or sets the customers full name.
         /// </summary>
-        public string CustomerName { get; set; }
+        public required string CustomerName { get; set; }
 
         /// <summary>
         /// Gets or sets the customers email address.
         /// </summary>
         [MaxLength(50)]
-        public string CustomerEmail { get; set; }
+        public required string CustomerEmail { get; set; }
     }
 }
