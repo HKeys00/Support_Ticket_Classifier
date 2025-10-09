@@ -13,9 +13,17 @@ namespace Shared.Enums.Ticket
 
         [Description("Billing Inquiry")]
         BillingInquiry = 1,
+
+        [Description("Cancellation Request")]
         CancellationRequest = 2,
+
+        [Description("Product Inquiry")]
         ProductInquiry = 3,
+
+        [Description("Refund Request")]
         RefundRequest = 4,
+
+        [Description("Technical Issue")]
         TechnicalIssue = 5
     }
 }

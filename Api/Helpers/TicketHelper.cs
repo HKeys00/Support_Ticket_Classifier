@@ -1,5 +1,6 @@
 ﻿using Api.Models;
 using Shared.Models;
+using Shared.Helpers;
 
 namespace Api.Helpers
 {
@@ -9,21 +10,37 @@ namespace Api.Helpers
     public static class TicketHelper
     {
         /// <summary>
-        /// Converts a ticket to a dto record.
+        /// Converts a ticket to a prediction dto record.
         /// </summary>
         /// <param name="ticket">The ticket data to convert.</param>
         /// <returns>A dto record.</returns>
-        public static TicketDto TicketToDto(Ticket ticket)
+        public static TicketPredictionDto TicketToPredictionDto(Ticket ticket)
         {
-            return new TicketDto
+            return new TicketPredictionDto
             {
-                ProductPurchased = ticket.ProductPurchased,
-                DateOfPurchase = ticket.DateOfPurchase.ToShortDateString(),
+                DateOfPurchase = ticket.DateOfPurchase.ToString("yyyy-mm-dd"),
                 TicketType = ticket.Type,
                 TicketSubject = ticket.Subject,
                 TicketDescription = ticket.Description,
                 TicketChannel = ticket.Channel,
-                TicketPriority = ticket.Priority.ToString(),
+            };
+        }
+
+        /// <summary>
+        /// Converts a ticket to a correction dto record.
+        /// </summary>
+        /// <param name="ticket">The ticket data to convert.</param>
+        /// <returns>A dto record.</returns>
+        public static TicketCorrectionDto TicketToCorrectionDto(Ticket ticket)
+        {
+            return new TicketCorrectionDto
+            {
+                DateOfPurchase = ticket.DateOfPurchase.ToString("yyyy-mm-dd"),
+                TicketType = ticket.Type.GetDescription(),
+                TicketSubject = ticket.Subject,
+                TicketDescription = ticket.Description,
+                TicketChannel = ticket.Channel.GetDescription(),
+                TicketPriority = ticket.Priority.GetDescription()
             };
         }
     }

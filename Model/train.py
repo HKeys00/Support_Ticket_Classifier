@@ -186,8 +186,8 @@ y_train = strat_train_set["Ticket Priority"]
 x_test = strat_test_set.drop("Ticket Priority", axis=1)
 y_test = strat_test_set["Ticket Priority"]
 
-y_train_encoded = label_encoder.fit_transform(y_train.values.reshape(-1, 1))
-y_test_encoded = label_encoder.transform(y_test.values.reshape(-1, 1))
+y_train_encoded = label_encoder.fit_transform(y_train.to_frame())
+y_test_encoded  = label_encoder.transform(y_test.to_frame())
 
 pipeline.fit(x_train, y_train_encoded.ravel())
 

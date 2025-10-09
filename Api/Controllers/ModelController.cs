@@ -88,7 +88,7 @@ namespace Api.Controllers
 
             corrections.ForEach(c => c.Ticket.Priority = (TicketPriority)c.CorrectedPriority);
             
-            var tickets = corrections.Select(c => TicketHelper.TicketToDto(c.Ticket)).ToList();
+            var tickets = corrections.Select(c => TicketHelper.TicketToCorrectionDto(c.Ticket)).ToList();
             using var client = _clientFactory.CreateClient();
 
             try
