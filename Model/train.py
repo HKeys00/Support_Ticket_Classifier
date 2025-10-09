@@ -164,8 +164,7 @@ preprocesser = ColumnTransformer([
 # - x_test is the test feature set, is the inputs the model will use to make predictions
 # - y_test is the test target set, is the labels for those inputs
 
-from sklearn import svm
-from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import FunctionTransformer
 
 def to_dense_transform(x):
@@ -174,8 +173,7 @@ def to_dense_transform(x):
 pipeline = Pipeline([
     ("preprocessing", preprocesser),
     ("to_dense", FunctionTransformer(to_dense_transform)),
-    ("scaler", StandardScaler(with_mean=False)),
-    ("svm", svm.SVC(probability=True))
+    ("clf", SGDClassifier(loss="log_loss"))
 ])
 
 priority_order = [["Low", "Medium", "High", "Critical"]]
