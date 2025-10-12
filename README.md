@@ -76,8 +76,7 @@ The model is created in the following kaggle notebook:
   - [x] Confirmation toasts (success/error)  
   - [x] Loading indicators while saving/querying model  
   - [x] Empty states (“No tickets yet”)  
-- [x] Error handling for API calls (friendly UI + retry)  
-- [ ] Implement HuggingFace model
+- [x] Error handling for API calls (friendly UI + retry)
 ---
 
 ### v1.2 – Production Ready (DevOps + Reliability)
