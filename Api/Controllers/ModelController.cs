@@ -3,6 +3,7 @@ using Api.Helpers;
 using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using Shared.Enums.Ticket;
 using Shared.Models;
 
@@ -86,6 +87,11 @@ namespace Api.Controllers
                 .Include(c => c.Ticket)
                 .ToListAsync();
 
+            if (corrections.Count == 0)
+            {
+                return Ok("Success");
+            }
+
             corrections.ForEach(c => c.Ticket.Priority = (TicketPriority)c.CorrectedPriority);
             
             var tickets = corrections.Select(c => TicketHelper.TicketToCorrectionDto(c.Ticket)).ToList();
@@ -103,6 +109,10 @@ namespace Api.Controllers
                 }
 
                 _logger.LogInformation("Successfull retrained the model");
+
+                await _context.Corrections.ExecuteDeleteAsync();
+                await _context.SaveChangesAsync();
+
                 return Ok(json);
             } catch (Exception ex)
             {

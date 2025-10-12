@@ -86,6 +86,7 @@ namespace Api.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Error fetching tickets");
                 return Problem(
                     detail: $"An unexpected error occured while fetching all tickets: {ex.Message}",
                     statusCode: StatusCodes.Status500InternalServerError);
@@ -108,12 +109,17 @@ namespace Api.Controllers
                 return Ok(ticket.Id);
             } catch (Exception ex)
             {
+                _logger.LogError(ex, "Error creating ticket ticket");
                 return Problem(
-                    detail: $"An unexpected error occured while fetching all tickets: {ex.Message}",
+                    detail: $"An unexpected error occured while creating a ticket: {ex.Message}",
                     statusCode: StatusCodes.Status500InternalServerError);
             }
         }
 
+        /// <summary>
+        /// Updates a ticket in the database.
+        /// </summary>
+        /// <param name="ticket">The new ticket data.</param>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -161,12 +167,36 @@ namespace Api.Controllers
 
                 return Ok();
             } catch (Exception ex) {
+                _logger.LogError(ex, "Error updating ticket.");
                 return Problem(
                     detail: $"An unexpected error occurred while updating the ticket: {ex.Message}",
                     statusCode: StatusCodes.Status500InternalServerError
                 );
             }
         }
+
+        /// <summary>
+        /// Checks if corrections exist in the database.
+        /// </summary>
+        [HttpGet("corrections")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<bool>> GetCorrectionsExist()
+        {
+            try
+            {
+                int count = await _context.Corrections.CountAsync();
+                return Ok(count > 0);
+            } catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching corrections.");
+                return Problem(
+                    detail: $"An unexpected error occurred while fetching corrections: {ex.Message}",
+                    statusCode: StatusCodes.Status500InternalServerError
+                );
+            }
+            
+        }
+
         #endregion
     }
 }
