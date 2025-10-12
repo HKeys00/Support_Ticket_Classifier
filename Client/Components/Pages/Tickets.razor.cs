@@ -17,6 +17,7 @@ namespace Client.Components.Pages
 
         private bool _existingTicketDialogShowing;
         private bool _newTicketDialogShowing;
+        private bool _showRetrainModel;
 
         #endregion
 
@@ -75,20 +76,22 @@ namespace Client.Components.Pages
             TicketDragService.TicketDragged += OnTicketDragged;
             _tickets = [];
 
-            var fetchTickets = await TicketService.GetTicketsAsync();
-            if (fetchTickets.Success)
+            var fetch = await TicketService.GetTicketsAsync();
+            if (fetch.Success)
             {
-                _tickets = fetchTickets.TicketData!;
+                _tickets = fetch.TicketData!;
             } else
             {
                 await ToastService.ShowToast(new ToastMessage()
                 {
                     Title = "Could not fetch existing tickets!",
-                    Message = $"An error occured fetching tickets from the database: {fetchTickets.ErrorMessage}",
+                    Message = $"An error occured fetching tickets from the database: {fetch.ErrorMessage}",
                     Level = Enums.ToastLevel.Error,
                     DurationMs = 5000,
                 });
             }
+
+            _showRetrainModel = await TicketService.GetCorrectionsExist();
         }
 
         /// <summary>
@@ -119,6 +122,7 @@ namespace Client.Components.Pages
                 return;
             }
 
+            _showRetrainModel = false;
             await ToastService.ShowToast(new ToastMessage()
             {
                 Title = "Submitted corrections to model!",

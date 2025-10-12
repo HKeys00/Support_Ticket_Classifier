@@ -178,7 +178,7 @@ namespace Api.Controllers
         /// <summary>
         /// Checks if corrections exist in the database.
         /// </summary>
-        [HttpGet("corrections")]
+        [HttpGet("/corrections")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> GetCorrectionsExist()
         {
