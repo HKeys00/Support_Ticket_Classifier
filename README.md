@@ -70,7 +70,7 @@ The model is created in the following kaggle notebook:
 
 ### v1.1 – Polish (Usability + Feedback Loop)
 - [x] Feed manual corrections back into a feedback dataset  
-- [ ] “Retrain model” button to reload ML with corrections  
+- [x] “Retrain model” button to reload ML with corrections  
 - [x] Display ML prediction confidence (probabilities per class)  
 - [x] Add UI polish:
   - [x] Confirmation toasts (success/error)  
