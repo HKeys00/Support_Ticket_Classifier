@@ -75,16 +75,16 @@ namespace Client.Components.Pages
             TicketDragService.TicketDragged += OnTicketDragged;
             _tickets = [];
 
-            var fetch = await TicketService.GetTicketsAsync();
-            if (fetch.Success)
+            var fetchTickets = await TicketService.GetTicketsAsync();
+            if (fetchTickets.Success)
             {
-                _tickets = fetch.TicketData!;
+                _tickets = fetchTickets.TicketData!;
             } else
             {
                 await ToastService.ShowToast(new ToastMessage()
                 {
                     Title = "Could not fetch existing tickets!",
-                    Message = $"An error occured fetching tickets from the database: {fetch.ErrorMessage}",
+                    Message = $"An error occured fetching tickets from the database: {fetchTickets.ErrorMessage}",
                     Level = Enums.ToastLevel.Error,
                     DurationMs = 5000,
                 });
@@ -105,7 +105,27 @@ namespace Client.Components.Pages
         /// </summary>
         private async void OnModelRetrainRequested()
         {
-            await ModelService.RetrainModel();
+            var result = await ModelService.RetrainModel();
+            if (!result.Success)
+            {
+                await ToastService.ShowToast(new ToastMessage()
+                {
+                    Title = "An error occured!",
+                    Message = $"{result.ErrorMessage}.",
+                    Level = Enums.ToastLevel.Error,
+                    DurationMs = 5000,
+                });
+
+                return;
+            }
+
+            await ToastService.ShowToast(new ToastMessage()
+            {
+                Title = "Submitted corrections to model!",
+                Message = string.Empty,
+                Level = Enums.ToastLevel.Success,
+                DurationMs = 5000,
+            });
         }
 
         /// <summary>

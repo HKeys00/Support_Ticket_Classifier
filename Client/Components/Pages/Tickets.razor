@@ -29,5 +29,5 @@
     <div class="footer segment"></div>
 </div>
 
-<EditTicket @bind-IsVisible="_existingTicketDialogShowing" Ticket="_selectedTicket" />
+<EditTicket @bind-IsVisible="_existingTicketDialogShowing" Ticket="_selectedTicket" TicketChanged="() => {StateHasChanged();}"/>
 <NewTicket @bind-IsVisible="_newTicketDialogShowing" TicketCreated="OnNewTicketAdded"/>

@@ -95,6 +95,24 @@ namespace Client.Services
             );
         }
 
+        /// <summary>
+        /// Checks the database to see if corrections exist.
+        /// </summary>
+        /// <returns>If corrections exist.</returns>
+        public async Task<bool> GetCorrectionsExist()
+        {
+            using var client = _clientFactory.CreateClient("Api");
+            var response = await client.GetAsync("corrections");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                return bool.Parse(result);
+            }
+
+            return false;
+        }
+
         #endregion
     }
 }

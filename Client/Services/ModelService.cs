@@ -55,12 +55,21 @@ namespace Client.Services
             );
         }
 
-        public async Task RetrainModel()
+        /// <summary>
+        /// Gets a 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<RetrainResult> RetrainModel()
         {
             using var client = _clientFactory.CreateClient("Api");
             var response = await client.PostAsync("model/retrain", null);
 
-            
+            if (response.IsSuccessStatusCode)
+            {
+                return RetrainResult.FromSuccess();
+            }
+
+            return RetrainResult.FromError(response.ReasonPhrase ?? string.Empty, response.StatusCode);
         }
 
         #endregion
