@@ -65,7 +65,6 @@ The model is created in the following kaggle notebook:
 - [x] Query ML model for predicted priority on ticket creation  
 - [x] Manually update priority and log correction  
 - [x] Drag & drop tickets between columns (updates DB)  
-
 ---
 
 ### v1.1 – Polish (Usability + Feedback Loop)
@@ -78,6 +77,7 @@ The model is created in the following kaggle notebook:
   - [x] Empty states (“No tickets yet”)  
 - [x] Error handling for API calls (friendly UI + retry)
 - [ ] Cancel button for submitting a ticket.
+- [ ] Implemented Middleware (Not sure what kind yet)
 ---
 
 ### v1.2 – Production Ready (DevOps + Reliability)
@@ -98,7 +98,6 @@ The model is created in the following kaggle notebook:
 - [ ] Add explainability to predictions (keywords or SHAP values)  
 - [ ] Track model accuracy over time (how many predictions were corrected)  
 - [ ] Short demo video + polished README with screenshots  
-
 ---
 
 ## Future Enhancements (Ideas Backlog)
