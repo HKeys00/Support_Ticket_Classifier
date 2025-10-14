@@ -77,6 +77,7 @@ The model is created in the following kaggle notebook:
   - [x] Loading indicators while saving/querying model  
   - [x] Empty states (“No tickets yet”)  
 - [x] Error handling for API calls (friendly UI + retry)
+- [ ] Cancel button for submitting a ticket.
 ---
 
 ### v1.2 – Production Ready (DevOps + Reliability)
