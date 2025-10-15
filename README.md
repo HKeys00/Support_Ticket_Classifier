@@ -76,7 +76,7 @@ The model is created in the following kaggle notebook:
   - [x] Loading indicators while saving/querying model  
   - [x] Empty states (“No tickets yet”)  
 - [x] Error handling for API calls (friendly UI + retry)
-- [ ] Cancel button for retraining the model.
+- [x] Cancel button for retraining the model.
 - [ ] Implemented Middleware (Not sure what kind yet)
 - [ ] Be able to toggle between trained model and GPT call
 ---
