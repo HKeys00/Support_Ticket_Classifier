@@ -118,7 +118,7 @@ namespace Client.Components.Kanban.Dialogs
             var response = await TicketService.CreateTicketAsync(_ticketModel);
             if (!response.Success)
             {
-                await ToastService.ShowToast(new Model.ToastMessage()
+                ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "Failed to create ticket!",
                     Message = $"An error occured: {response.ErrorMessage}",
@@ -133,7 +133,7 @@ namespace Client.Components.Kanban.Dialogs
             {
                 var prediction = predictionResult.Prediction!;
                 string confidence = (prediction.Confidence[prediction.Value] * 100).ToString("F0");
-                await ToastService.ShowToast(new Model.ToastMessage()
+                ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "New Ticket Created!",
                     Message = $"This ticket has been assigned a priority of {(TicketPriority)prediction.Value} with a confidence level of {confidence}%",
@@ -142,7 +142,7 @@ namespace Client.Components.Kanban.Dialogs
                 });
             } else
             {
-                await ToastService.ShowToast(new Model.ToastMessage()
+                ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "New Ticket Created!",
                     Message = "A priority prediction couldn't be made so it has been set to low priority",

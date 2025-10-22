@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Models;
+using Shared;
 
 namespace Api.Controllers
 {
@@ -9,7 +10,7 @@ namespace Api.Controllers
     /// Controller class that handles CRUD operations for support tickets.
     /// </summary>
     [ApiController]
-    [Route("ticket")]
+    [Route(ApiEndpoints.Ticket.Endpoint)]
     public class TicketController : ControllerBase
     {
         #region Fields
@@ -178,7 +179,7 @@ namespace Api.Controllers
         /// <summary>
         /// Checks if corrections exist in the database.
         /// </summary>
-        [HttpGet("/corrections")]
+        [HttpGet(ApiEndpoints.Ticket.Corrections)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> GetCorrectionsExist()
         {

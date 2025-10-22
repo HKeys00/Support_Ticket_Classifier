@@ -50,8 +50,10 @@ namespace Client.Components.Kanban
 
         #region Methods
 
-        /// <inheritdoc />
-        protected override void OnInitialized()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Ticket"/> component.
+        /// </summary>
+        public Ticket()
         {
             _ticketPriorityIconPath = string.Empty;
             _ticketTypeIconPath = string.Empty;

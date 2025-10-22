@@ -1,11 +1,10 @@
 ﻿using Api.Data;
 using Api.Helpers;
-using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 using Shared.Enums.Ticket;
 using Shared.Models;
+using Shared;
 
 namespace Api.Controllers
 {
@@ -13,7 +12,7 @@ namespace Api.Controllers
     /// Controller class that handles interactions with the ML model.
     /// </summary>
     [ApiController]
-    [Route("model")]
+    [Route(ApiEndpoints.Model.Endpoint)]
     public class ModelController : ControllerBase
     {
         #region Fields
@@ -48,7 +47,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="ticket">The ticket data.</param>
         /// <returns>The prediction as a json string from the model.</returns>
-        [HttpPost("prediction")]
+        [HttpPost(ApiEndpoints.Model.Prediction)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> GetPriorityPrediction([FromBody] Ticket ticket)
@@ -77,10 +76,18 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPost("retrain")]
+        /// <summary>
+        /// Retrains the model based on the corrections made to the tickets.
+        /// </summary>
+        /// <remarks>
+        /// This method is deliberatly inefficient because I was messing around with 
+        /// cancellation tokens
+        /// </remarks>
+        /// <param name="cancellation">The cancellation token.</param>
+        [HttpPost(ApiEndpoints.Model.Retrain)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> RetrainModel()
+        public async Task<ActionResult<string>> RetrainModel(CancellationToken cancellation)
         {
             var corrections = await _context.Corrections
                 .AsNoTracking()
@@ -99,21 +106,25 @@ namespace Api.Controllers
 
             try
             {
-                var response = await client.PostAsJsonAsync("http://localhost:3000/retrain", tickets);
-                var json = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode)
+                foreach (var ticket in tickets)
                 {
-                    _logger.LogWarning("Model API returned error: {Status} - {Message}", response.StatusCode, json);
-                    return StatusCode((int)response.StatusCode, json);
+                    cancellation.ThrowIfCancellationRequested();
+                    var response = await client.PostAsJsonAsync("http://localhost:3000/retrain", ticket);
+                    var json = await response.Content.ReadAsStringAsync();
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.LogWarning("Model API returned error: {Status} - {Message}", response.StatusCode, json);
+                        return StatusCode((int)response.StatusCode, json);
+                    }
+
+                    _logger.LogInformation("Successfull retrained the model");
                 }
 
-                _logger.LogInformation("Successfull retrained the model");
-
-                await _context.Corrections.ExecuteDeleteAsync();
+                await _context.Corrections.ExecuteDeleteAsync(cancellation);
                 await _context.SaveChangesAsync();
 
-                return Ok(json);
+                return Ok();
             } catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retraining model.");

@@ -28,6 +28,14 @@ namespace Client.Components.Common
 
         #region Methods
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Toast"/> component.
+        /// </summary>
+        public Toast()
+        {
+            _toasts = [];
+        }
+
         /// <inheritdoc />
         protected override void OnInitialized()
         {

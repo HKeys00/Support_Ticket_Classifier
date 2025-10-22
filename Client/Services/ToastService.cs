@@ -22,7 +22,7 @@ namespace Client.Services
         /// Triggers the OnShow function.
         /// </summary>
         /// <param name="message">The new toast data.</param>
-        public async Task ShowToast(ToastMessage message)
+        public async void ShowToast(ToastMessage message)
         {
             if (OnShow == null) return;
             await OnShow.Invoke(message);

@@ -114,7 +114,7 @@ namespace Client.Components.Kanban.Dialogs
             var response = await TicketService.UpdateTicketAsync(_ticketModel);
             if (!response.Success)
             {
-                await ToastService.ShowToast(new Model.ToastMessage()
+                ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "Failed to update ticket.",
                     Message = $"{response.ErrorMessage}",
@@ -129,7 +129,7 @@ namespace Client.Components.Kanban.Dialogs
             await TicketChanged.InvokeAsync(Ticket);
             await IsVisibleChanged.InvokeAsync(false);
 
-            await ToastService.ShowToast(new Model.ToastMessage()
+            ToastService.ShowToast(new Model.ToastMessage()
             {
                 Title = "Ticket Updated!",
                 Message = "",

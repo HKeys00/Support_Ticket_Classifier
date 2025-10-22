@@ -39,6 +39,11 @@ def retrain():
         return jsonify({"status": "error", "message": result}), 500
     else:
         return jsonify({"status": "success", "message": result}), 200
+    
+@app.route('/version', methods=['GET'])
+def version():
+    return jsonify({"model_version": "1.0.0"})
+
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
 

@@ -25,6 +25,11 @@ namespace Api.Data
         /// </summary>
         public DbSet<Correction> Corrections { get; set; }
 
+        /// <summary>
+        /// Gets or sets the collection of all entities in the Requests database table.
+        /// </summary>
+        public DbSet<Request> Requests { get; set; }
+
         #endregion
 
         #region Constructor

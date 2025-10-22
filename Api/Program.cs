@@ -1,5 +1,7 @@
 using Api;
 using Api.Data;
+using Api.Middleware;
+using Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +21,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddHostedService<StartupWorker>();
 
+builder.Services.AddScoped<UsageQuotaService>();
+builder.Services.AddTransient<UsageQuotaMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,5 +41,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+app.UseMiddleware<UsageQuotaMiddleware>();
 
 app.Run();

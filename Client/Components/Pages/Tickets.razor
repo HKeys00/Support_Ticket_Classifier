@@ -1,10 +1,12 @@
 ﻿@page "/tickets"
 @rendermode InteractiveServer
+@using Client.Components.Common
 @using Client.Components.Kanban
 @using Client.Components.Kanban.Dialogs
 @using Shared.Enums.Ticket
 
-<Client.Components.Common.Toast />
+<Toast />
+<LoadingSpinner IsVisible="_loadingSpinnerVisible" CanCancel OnCancel="@OnRequestCanceled"/>
 <div class="page">
     <div class="header segment">
         <h1>Support Ticket Classifier Kanban Board</h1>
@@ -12,8 +14,8 @@
         {
             <button onclick="@OnModelRetrainRequested">
                 <h3>Retrain Model</h3>
-            <img src="images/refresh.png"/>
-        </button>
+                <img src="images/refresh.png"/>
+            </button>
         }
     </div>
     <div class="body segment">

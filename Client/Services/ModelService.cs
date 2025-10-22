@@ -1,4 +1,5 @@
-﻿using Shared.Models;
+﻿using Shared;
+using Shared.Models;
 using Shared.Models.Result;
 using System.Text.Json;
 
@@ -37,8 +38,10 @@ namespace Client.Services
         /// <returns>The prediction from the model.</returns>
         public async Task<PredictionResult> GetPriorityPrediction(Ticket ticket)
         {
-            using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PostAsJsonAsync("model/prediction", ticket);
+            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
+            var response = await client.PostAsJsonAsync(
+                Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Prediction),
+                ticket);
 
             if (response.IsSuccessStatusCode)
             {
@@ -56,20 +59,28 @@ namespace Client.Services
         }
 
         /// <summary>
-        /// Gets a 
+        /// Makes a request to retrain the model.
         /// </summary>
-        /// <returns></returns>
-        public async Task<RetrainResult> RetrainModel()
+        /// <returns>The result of the retrain request.</returns>
+        public async Task<RetrainResult> RetrainModel(CancellationToken cancellation)
         {
-            using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PostAsync("model/retrain", null);
+            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return RetrainResult.FromSuccess();
-            }
+                var response = await client.PostAsync(
+                    Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Retrain),
+                    null, cancellation);
+                if (response.IsSuccessStatusCode)
+                {
+                    return RetrainResult.FromSuccess();
+                }
 
-            return RetrainResult.FromError(response.ReasonPhrase ?? string.Empty, response.StatusCode);
+                return RetrainResult.FromError(response.ReasonPhrase ?? string.Empty, response.StatusCode);
+            } catch (Exception ex)
+            {
+                return RetrainResult.FromError(ex.Message ?? string.Empty);
+            }
         }
 
         #endregion

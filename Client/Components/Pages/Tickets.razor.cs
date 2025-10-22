@@ -17,7 +17,10 @@ namespace Client.Components.Pages
 
         private bool _existingTicketDialogShowing;
         private bool _newTicketDialogShowing;
+        private bool _loadingSpinnerVisible;
         private bool _showRetrainModel;
+
+        private CancellationTokenSource _tokenSource;
 
         #endregion
 
@@ -63,6 +66,7 @@ namespace Client.Components.Pages
         public Tickets()
         {
             _tickets = [];
+            _tokenSource = new CancellationTokenSource();
         }
 
         #endregion
@@ -82,7 +86,7 @@ namespace Client.Components.Pages
                 _tickets = fetch.TicketData!;
             } else
             {
-                await ToastService.ShowToast(new ToastMessage()
+                ToastService.ShowToast(new ToastMessage()
                 {
                     Title = "Could not fetch existing tickets!",
                     Message = $"An error occured fetching tickets from the database: {fetch.ErrorMessage}",
@@ -92,6 +96,16 @@ namespace Client.Components.Pages
             }
 
             _showRetrainModel = await TicketService.GetCorrectionsExist();
+        }
+
+        /// <summary>
+        /// Handles a request to cancel the current long running request.
+        /// </summary>
+        private void OnRequestCanceled()
+        {
+            _tokenSource.Cancel();
+            _tokenSource.Dispose();
+            _tokenSource = new CancellationTokenSource();
         }
 
         /// <summary>
@@ -108,28 +122,33 @@ namespace Client.Components.Pages
         /// </summary>
         private async void OnModelRetrainRequested()
         {
-            var result = await ModelService.RetrainModel();
+            _loadingSpinnerVisible = true;
+            
+            var result = await ModelService.RetrainModel(_tokenSource.Token);
             if (!result.Success)
             {
-                await ToastService.ShowToast(new ToastMessage()
+                ToastService.ShowToast(new ToastMessage()
                 {
                     Title = "An error occured!",
                     Message = $"{result.ErrorMessage}.",
                     Level = Enums.ToastLevel.Error,
                     DurationMs = 5000,
                 });
+            } else
+            {
+                _showRetrainModel = false;
 
-                return;
+                ToastService.ShowToast(new ToastMessage()
+                {
+                    Title = "Submitted corrections to model!",
+                    Message = string.Empty,
+                    Level = Enums.ToastLevel.Success,
+                    DurationMs = 5000,
+                });
             }
 
-            _showRetrainModel = false;
-            await ToastService.ShowToast(new ToastMessage()
-            {
-                Title = "Submitted corrections to model!",
-                Message = string.Empty,
-                Level = Enums.ToastLevel.Success,
-                DurationMs = 5000,
-            });
+            _loadingSpinnerVisible = false;
+            StateHasChanged();
         }
 
         /// <summary>
@@ -141,7 +160,7 @@ namespace Client.Components.Pages
             _selectedTicket = _tickets.FirstOrDefault(t => t.Id == e.Id);
             if (_selectedTicket == null)
             {
-                await ToastService.ShowToast(new ToastMessage()
+                ToastService.ShowToast(new ToastMessage()
                 {
                     Title = "An error occured!",
                     Message = $"Unable to drag ticket because it doesn't exist.",
@@ -156,7 +175,7 @@ namespace Client.Components.Pages
             var response = await TicketService.UpdateTicketAsync(_selectedTicket);
             if (!response.Success)
             {
-                await ToastService.ShowToast(new ToastMessage()
+                ToastService.ShowToast(new ToastMessage()
                 {
                     Title = "An error occured!",
                     Message = response.ErrorMessage!,

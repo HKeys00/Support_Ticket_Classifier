@@ -1,4 +1,5 @@
-﻿using Shared.Models;
+﻿using Shared;
+using Shared.Models;
 using Shared.Models.Result;
 
 namespace Client.Services
@@ -35,8 +36,8 @@ namespace Client.Services
         /// <returns>A list of tickets.</returns>
         public async Task<TicketResult<List<Ticket>>> GetTicketsAsync()
         {
-            using var client = _clientFactory.CreateClient("Api");
-            var response = await client.GetAsync("ticket");
+            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
+            var response = await client.GetAsync(ApiEndpoints.Ticket.Endpoint);
 
             if (response.IsSuccessStatusCode)
             {
@@ -57,8 +58,8 @@ namespace Client.Services
         /// <param name="ticket">The ticket data.</param>
         public async Task<TicketResult<int>> CreateTicketAsync(Ticket ticket)
         {
-            using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PostAsJsonAsync("ticket", ticket);
+            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
+            var response = await client.PostAsJsonAsync(ApiEndpoints.Ticket.Endpoint, ticket);
 
             if (response.IsSuccessStatusCode)
             {
@@ -80,8 +81,8 @@ namespace Client.Services
         /// <returns>The result of the update.</returns>
         public async Task<TicketResult<int>> UpdateTicketAsync(Ticket ticket)
         {
-            using var client = _clientFactory.CreateClient("Api");
-            var response = await client.PutAsJsonAsync("ticket", ticket);
+            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
+            var response = await client.PutAsJsonAsync(ApiEndpoints.Ticket.Endpoint, ticket);
 
             if (response.IsSuccessStatusCode)
             {
@@ -101,8 +102,8 @@ namespace Client.Services
         /// <returns>If corrections exist.</returns>
         public async Task<bool> GetCorrectionsExist()
         {
-            using var client = _clientFactory.CreateClient("Api");
-            var response = await client.GetAsync("corrections");
+            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
+            var response = await client.GetAsync(Path.Combine(ApiEndpoints.Ticket.Endpoint, ApiEndpoints.Ticket.Corrections));
 
             if (response.IsSuccessStatusCode)
             {
