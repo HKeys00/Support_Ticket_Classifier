@@ -77,7 +77,7 @@ The model is created in the following kaggle notebook:
   - [x] Empty states (“No tickets yet”)  
 - [x] Error handling for API calls (friendly UI + retry)
 - [x] Cancel button for retraining the model.
-- [ ] Implemented Middleware (Not sure what kind yet)
+- [x] Implement Logging and Usage throttling middleware
 - [ ] Be able to toggle between trained model and GPT call
 ---
 
