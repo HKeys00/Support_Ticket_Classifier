@@ -41,9 +41,6 @@ y_train_encoded = le.fit_transform(y_train)
 y_test_encoded = le.transform(y_test)
 
 cat_cols = ["Ticket Channel", "Ticket Type"]
-cat_transformer = make_pipeline(
-    OneHotEncoder(handle_unknown="ignore")
-)
 
 preprocessor = ColumnTransformer([
     ("cat", OneHotEncoder(handle_unknown="ignore"), cat_cols),
@@ -63,5 +60,9 @@ model = Pipeline([
 ])
 
 model.fit(x_train, y_train_encoded)
-joblib.dump(model, MODEL_PATH)
+predictions = model.predict(x_test)
+
+print (x_test.head())
+print(predictions)
+#joblib.dump(model, MODEL_PATH)
 #joblib.dump(label_encoder, "label_encoder.pkl")

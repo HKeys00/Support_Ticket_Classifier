@@ -2,6 +2,8 @@
 using Shared.Models;
 using Shared.Models.Result;
 using System.Text.Json;
+using OpenAI;
+using OpenAI.Responses;
 
 namespace Client.Services
 {
@@ -10,7 +12,14 @@ namespace Client.Services
     /// </summary>
     public class ModelService
     {
+        #region Constants
+        https://huggingface.co/MiniMaxAI/MiniMax-M2
+        private readonly string _key =
+            "";
+
+        #endregion
         #region Fields
+
 
         private readonly IHttpClientFactory _clientFactory;
 
@@ -47,6 +56,33 @@ namespace Client.Services
             {
                 var result = await response.Content.ReadAsStringAsync();
                 var prediction = JsonSerializer.Deserialize<Prediction>(result);
+
+                if (prediction.Confidence[prediction.Value] < 0.25)
+                {
+                    try
+                    {
+                        var openClient = new OpenAIResponseClient("text-moderation", _key);
+
+                        var aiResponse = await openClient.CreateResponseAsync(
+                            userInputText:
+                            $@"Given the support ticket description below return a ticket priority (Low, Medium, High or Critical)
+                               {ticket.Description}",
+                            new ResponseCreationOptions()
+                            {
+                                ReasoningOptions = new ResponseReasoningOptions()
+                                {
+                                    ReasoningEffortLevel = ResponseReasoningEffortLevel.Low,
+                                }
+                            });
+                    }
+                    catch (Exception ex)
+                    {
+                        var t = 2;
+                    }
+                    
+
+                    var m = 0l;
+                }
 
                 return PredictionResult.FromSuccess(prediction!);
             }

@@ -2,6 +2,8 @@
 using Shared.Models;
 using Shared;
 using System.Net;
+using Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Services
 {
@@ -14,8 +16,10 @@ namespace Api.Services
 
         private Dictionary<string, int> EndPointHourlyLimits = new()
         {
-            {Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Retrain), 5}
+            {EndpointHelper.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Retrain), 5}
         };
+
+        private int TimeoutMS = 60000;
 
         #endregion
 
@@ -88,9 +92,21 @@ namespace Api.Services
                 return 0;
             }
 
+            string ip = address.ToString();
+            DateTime date = DateTime.UtcNow.AddHours(-1);
 
+            var requests = await _context.Requests
+                .AsNoTracking()
+                .Where(r => r.IpAddress == ip)
+                .Where(r => r.DateTime > date)
+                .ToListAsync();
+            int count = requests.Count;
+             
+            if (count >= limit)
+            {
+                return TimeoutMS;
+            }
 
-            //if (endpoint == )
             return 0;
         }
 

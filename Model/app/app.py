@@ -1,24 +1,30 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../model')))
+
 from flask import Flask, request, jsonify
 from retrain import retrain_model
 import joblib
 import pandas as pd
 
-def to_dense_transform(x):
-    return x.toarray() if hasattr(x, "toarray") else x
-
+def squeeze_column(x):
+    return x.squeeze()
 
 app = Flask(__name__)
-model = joblib.load('ticket_classifier_model.pkl')
+version = '00001'
+path = '../model/ticket_classifier_model/' + version + '.pkl'
+model = joblib.load(path)
 
 @app.route('/predict', methods=['POST'])
 def predict():
     data = request.get_json(force=True)
     new_ticket = pd.DataFrame([{
         "Date of Purchase": data["dateOfPurchase"],
-        "Ticket Type": data["type"],
-        "Ticket Subject": data["subject"],
-        "Ticket Description": data["description"],
-        "Ticket Channel": data["channel"]
+        "Ticket Type": data["ticketType"],
+        "Ticket Subject": [data["ticketSubject"]],
+        "Ticket Description": [data["ticketDescription"]],
+        "Ticket Channel": data["ticketChannel"]
     }])
 
     predicted_class = int(model.predict(new_ticket)[0])
@@ -33,7 +39,7 @@ def predict():
 @app.route('/retrain', methods=['POST'])
 def retrain():
     feedback = request.get_json(force=True)
-    result = retrain_model(feedback)
+    result = retrain_model(feedback, path)
 
     if "Error during retraining" in result:
         return jsonify({"status": "error", "message": result}), 500

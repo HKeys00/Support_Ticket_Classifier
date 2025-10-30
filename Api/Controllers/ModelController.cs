@@ -1,5 +1,6 @@
 ﻿using Api.Data;
 using Api.Helpers;
+using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shared.Enums.Ticket;
@@ -56,7 +57,7 @@ namespace Api.Controllers
 
             try
             {
-                var response = await client.PostAsJsonAsync<Ticket>("http://localhost:3000/predict", ticket);
+                var response = await client.PostAsJsonAsync("http://localhost:3000/predict", ticket.TicketToPredictionDto());
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)

@@ -15,7 +15,7 @@ namespace Api.Models
         /// <summary>
         /// Gets or sets the type of ticket.
         /// </summary>
-        public TicketType TicketType { get; set; }
+        public required string TicketType { get; set; }
 
         /// <summary>
         /// Gets or sets the subject/topic of the ticket.
@@ -30,6 +30,6 @@ namespace Api.Models
         /// <summary>
         /// Gets or sets the channel through which the ticket was raised.
         /// </summary>
-        public TicketChannel TicketChannel { get; set; }
+        public required string TicketChannel { get; set; }
     }
 }

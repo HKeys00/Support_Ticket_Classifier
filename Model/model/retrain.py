@@ -2,9 +2,9 @@ import pandas as pd
 import joblib
 import numpy as np
 
-def retrain_model(feedback):
+def retrain_model(feedback, path):
     try:
-        pipeline = joblib.load("ticket_classifier_model.pkl")
+        pipeline = joblib.load(path)
         label_encoder = joblib.load("label_encoder.pkl")
         
         # Clean feedback

@@ -52,6 +52,8 @@ namespace Api.Middleware
 
             await _usageQuotaService.CreateRequest(ip, context.Request.Path);
             await next.Invoke(context);
+
+            Console.WriteLine(context);
         }
 
         #endregion
