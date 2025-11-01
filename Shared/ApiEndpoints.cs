@@ -13,7 +13,8 @@
         public class Model
         {
             public const string Endpoint = "model";
-            public const string Prediction = "prediction";
+            public const string ModelPrediction = "model-prediction";
+            public const string LLMPrediction = "llm-prediction";
             public const string Retrain = "retrain";
         }
 
