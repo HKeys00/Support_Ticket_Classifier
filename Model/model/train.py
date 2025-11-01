@@ -1,14 +1,16 @@
 import os
 import pandas as pd
+import shap
 from pathlib import Path
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder, FunctionTransformer
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import SGDClassifier
+from sklearn.metrics import classification_report
 import joblib
+import matplotlib.pyplot as plt
 
 # ------------------------------------------------------
 # CONFIG
@@ -62,7 +64,25 @@ model = Pipeline([
 model.fit(x_train, y_train_encoded)
 predictions = model.predict(x_test)
 
-print (x_test.head())
-print(predictions)
+print(classification_report(y_test_encoded, predictions))
+
+
+X_processed = model.named_steps["preprocessing"].transform(x_test).toarray()
+
+explainer = shap.LinearExplainer(
+    model.named_steps["clf"],
+    X_processed,
+    feature_dependence="independent"
+)
+shap_values = explainer(X_processed[:100])
+
+print(type(model.named_steps["clf"]))
+
+shap.summary_plot(shap_values, X_processed)
+plt.show()
+
+
 #joblib.dump(model, MODEL_PATH)
 #joblib.dump(label_encoder, "label_encoder.pkl")
+
+

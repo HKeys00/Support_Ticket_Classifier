@@ -96,8 +96,9 @@ namespace Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<string>> GetLLMPriorityPrediction([FromBody] Ticket ticket)
         {
+            string? key = Environment.GetEnvironmentVariable("HUGGING_FACE_KEY");
             using var client = _clientFactory.CreateClient();
-            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _key);
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", key);
             try
             {
                 var content = new
@@ -131,10 +132,9 @@ namespace Api.Controllers
 
                 if (string.IsNullOrEmpty(prediction))
                 {
-                    throw new Exception(
+                    throw new Exception("Prediction not found in response");
                 }
 
-                var re = ahhh.ParsePriority();
 
                 _logger.LogInformation("Successfully fetched prediction from LLM");
                 return Ok(json);

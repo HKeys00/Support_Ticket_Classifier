@@ -2,10 +2,6 @@
 using Shared.Models;
 using Shared.Models.Result;
 using System.Text.Json;
-using OpenAI;
-using OpenAI.Responses;
-using HuggingFace;
-using Client.Helpers;
 
 namespace Client.Services
 {
@@ -14,15 +10,7 @@ namespace Client.Services
     /// </summary>
     public class ModelService
     {
-        #region Constants
-
-        //https://huggingface.co/MiniMaxAI/MiniMax-M2
-        private readonly string _key =
-            
-
-        #endregion
         #region Fields
-
 
         private readonly IHttpClientFactory _clientFactory;
 
@@ -52,17 +40,19 @@ namespace Client.Services
         {
             using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
             var response = await client.PostAsJsonAsync(
-                Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Prediction),
-                ticket);
+                Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.ModelPrediction), ticket);
 
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
                 var prediction = JsonSerializer.Deserialize<Prediction>(result);
 
-                if (prediction.Confidence[prediction.Value] < 0.65)
+                //25% is bad confidence but since that is the max the model seems to be able to achieve we are setting that here
+                if (prediction == null || prediction.Confidence[prediction.Value] < 0.25)
                 {
-                   
+                    response = await client.PostAsJsonAsync(Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.LLMPrediction), ticket);
+                    result = await response.Content.ReadAsStringAsync();
+                    prediction = JsonSerializer.Deserialize<Prediction>(result);
                 }
 
                 return PredictionResult.FromSuccess(prediction!);

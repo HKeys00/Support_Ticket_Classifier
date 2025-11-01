@@ -50,6 +50,22 @@ namespace Api
                 var m = ex;
             }
 
+            string envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            if (!File.Exists(envPath))
+            {
+                // Handle error
+            }
+
+            foreach (var line in File.ReadAllLines(envPath))
+            {
+                if (string.IsNullOrEmpty(line)) continue;
+                var parts = line.Split('=', 2);
+
+                var key = parts[0].Trim();
+                var value = parts[1].Trim();
+
+                Environment.SetEnvironmentVariable(key, value);
+            }
         }
 
         /// <inheritdoc/>
