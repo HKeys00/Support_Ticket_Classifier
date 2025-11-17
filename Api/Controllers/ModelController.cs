@@ -137,7 +137,7 @@ namespace Api.Controllers
 
 
                 _logger.LogInformation("Successfully fetched prediction from LLM");
-                var jsonPrediction = new { Prediction = prediction, Confidence = 1};
+                var jsonPrediction = new { Value = prediction, Confidence = 1};
                 return Ok(JsonSerializer.Serialize(jsonPrediction));
             }
             catch (Exception ex)

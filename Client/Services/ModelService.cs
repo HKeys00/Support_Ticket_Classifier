@@ -44,19 +44,29 @@ namespace Client.Services
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync();
-                var modelPrediction = JsonSerializer.Deserialize<ModelPrediction>(result);
-
-                //25% is bad confidence but since that is the max the model seems to be able to achieve we are setting that here
-                if (modelPrediction == null || modelPrediction.Confidence[modelPrediction.Value] < 0.25)
+                try
                 {
-                    response = await client.PostAsJsonAsync(Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.LLMPrediction), ticket);
-                    result = await response.Content.ReadAsStringAsync();
-                    var llmPrediction = JsonSerializer.Deserialize<LLMPrediction>(result);
-                    return PredictionResult.FromSuccess(new Prediction(llmPrediction!));
-                }
+                    var result = await response.Content.ReadAsStringAsync();
+                    var modelPrediction = JsonSerializer.Deserialize<ModelPrediction>(result);
 
-                return PredictionResult.FromSuccess(new Prediction(modelPrediction!));
+                    //25% is bad confidence but since that is the max the model seems to be able to achieve we are setting that here
+                    if (modelPrediction == null || modelPrediction.Confidence[modelPrediction.Value] < 0.25)
+                    {
+                        response = await client.PostAsJsonAsync(Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.LLMPrediction), ticket);
+                        result = await response.Content.ReadAsStringAsync();
+                        var llmPrediction = JsonSerializer.Deserialize<LLMPrediction>(result);
+                        return PredictionResult.FromSuccess(new Prediction(llmPrediction!));
+                    }
+
+                    return PredictionResult.FromSuccess(new Prediction(modelPrediction!));
+                } catch (Exception ex)
+                {
+                    return PredictionResult.FromError(
+                        $"Prediction fetch encountered an error {ex.Message}",
+                        response.StatusCode
+                    );
+                }
+                
             }
 
             var error = await response.Content.ReadAsStringAsync();

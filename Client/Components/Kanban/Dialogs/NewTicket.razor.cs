@@ -132,7 +132,7 @@ namespace Client.Components.Kanban.Dialogs
             if (predictionResult.Success)
             {
                 var prediction = predictionResult.Prediction!;
-                string confidence = (prediction.Confidence[prediction.Value] * 100).ToString("F0");
+                string confidence = (prediction.Confidence * 100).ToString("F0");
                 ToastService.ShowToast(new Model.ToastMessage()
                 {
                     Title = "New Ticket Created!",
