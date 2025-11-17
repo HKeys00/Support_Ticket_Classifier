@@ -45,17 +45,18 @@ namespace Client.Services
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
-                var prediction = JsonSerializer.Deserialize<Prediction>(result);
+                var modelPrediction = JsonSerializer.Deserialize<ModelPrediction>(result);
 
                 //25% is bad confidence but since that is the max the model seems to be able to achieve we are setting that here
-                if (prediction == null || prediction.Confidence[prediction.Value] < 0.25)
+                if (modelPrediction == null || modelPrediction.Confidence[modelPrediction.Value] < 0.25)
                 {
                     response = await client.PostAsJsonAsync(Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.LLMPrediction), ticket);
                     result = await response.Content.ReadAsStringAsync();
-                    prediction = JsonSerializer.Deserialize<Prediction>(result);
+                    var llmPrediction = JsonSerializer.Deserialize<LLMPrediction>(result);
+                    return PredictionResult.FromSuccess(new Prediction(llmPrediction!));
                 }
 
-                return PredictionResult.FromSuccess(prediction!);
+                return PredictionResult.FromSuccess(new Prediction(modelPrediction!));
             }
 
             var error = await response.Content.ReadAsStringAsync();

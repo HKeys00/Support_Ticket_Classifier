@@ -112,7 +112,7 @@ namespace Client.Components.Kanban.Dialogs
 
             if (predictionResult.Success)
             {
-                _ticketModel.Priority = (TicketPriority)predictionResult.Prediction!.Value;
+                _ticketModel.Priority = predictionResult.Prediction!.Value;
             } 
 
             var response = await TicketService.CreateTicketAsync(_ticketModel);
