@@ -78,7 +78,7 @@ The model is created in the following kaggle notebook:
 - [x] Error handling for API calls (friendly UI + retry)
 - [x] Cancel button for retraining the model.
 - [x] Implement Logging and Usage throttling middleware
-- [ ] Be able to toggle between trained model and GPT call
+- [x] Be able to toggle between trained model and GPT call
 ---
 
 ### v1.2 – Production Ready (DevOps + Reliability)
