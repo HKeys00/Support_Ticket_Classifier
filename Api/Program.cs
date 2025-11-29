@@ -21,7 +21,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddHostedService<StartupWorker>();
 
-builder.Services.AddScoped<UsageQuotaService>();
+builder.Services.AddScoped<IUsageQuoataService, UsageQuotaService>();
+builder.Services.AddScoped<IUsageQuoataService, BusageQuotaService>();
+builder.Services.AddScoped<UsageQuotaMiddleware>();
 builder.Services.AddTransient<UsageQuotaMiddleware>();
 
 var app = builder.Build();
