@@ -1,5 +1,4 @@
 ﻿using Api.Services;
-
 namespace Api.Middleware
 {
     /// <summary>
@@ -7,12 +6,6 @@ namespace Api.Middleware
     /// </summary>
     public class UsageQuotaMiddleware : IMiddleware
     {
-        #region Constants
-
-
-
-        #endregion
-
         #region Fields
 
         private UsageQuotaService _usageQuotaService;

@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{719945C7-3BB0-42F6-91A0-34079A23B745}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Support_Ticket_Classifier.AppHost", "Aspire\Support_Ticket_Classifier.AppHost\Support_Ticket_Classifier.AppHost.csproj", "{A5162756-F1A3-4094-83D4-860A14B9CBD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Support_Ticket_Classifier.ServiceDefaults", "Aspire\Support_Ticket_Classifier.ServiceDefaults\Support_Ticket_Classifier.ServiceDefaults.csproj", "{A902E53C-2F74-4989-A19B-02998D7846D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{719945C7-3BB0-42F6-91A0-34079A23B745}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{719945C7-3BB0-42F6-91A0-34079A23B745}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{719945C7-3BB0-42F6-91A0-34079A23B745}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5162756-F1A3-4094-83D4-860A14B9CBD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5162756-F1A3-4094-83D4-860A14B9CBD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5162756-F1A3-4094-83D4-860A14B9CBD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5162756-F1A3-4094-83D4-860A14B9CBD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A902E53C-2F74-4989-A19B-02998D7846D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A902E53C-2F74-4989-A19B-02998D7846D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A902E53C-2F74-4989-A19B-02998D7846D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A902E53C-2F74-4989-A19B-02998D7846D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

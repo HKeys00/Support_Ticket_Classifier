@@ -10,7 +10,7 @@ namespace Api.Services
     /// <summary>
     /// Service that manages user limits.
     /// </summary>
-    public class UsageQuotaService : IUsageQuoataService
+    public class UsageQuotaService
     {
         #region Constants
 
