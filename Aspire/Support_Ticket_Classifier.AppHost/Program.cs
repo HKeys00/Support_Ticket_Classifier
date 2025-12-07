@@ -1,8 +1,12 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var api = builder.AddProject<Projects.Api>("api");
-builder.AddProject<Projects.Client>("client")
-    .WithExternalHttpEndpoints()
+var model = builder.AddPythonApp("model", "../../Model", "./app/app.py");
+
+var api = builder.AddProject<Projects.Api>("api")
+    .WithReference(model)
+    .WaitFor(model);
+
+var client = builder.AddProject<Projects.Client>("client")
     .WithReference(api)
     .WaitFor(api);
 

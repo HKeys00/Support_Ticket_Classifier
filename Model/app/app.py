@@ -7,13 +7,14 @@ from flask import Flask, request, jsonify
 from retrain import retrain_model
 import joblib
 import pandas as pd
+import os
 
 def squeeze_column(x):
     return x.squeeze()
 
 app = Flask(__name__)
 version = '00001'
-path = '../model/ticket_classifier_model/' + version + '.pkl'
+path = './model/ticket_classifier_model/' + version + '.pkl'
 model = joblib.load(path)
 
 @app.route('/predict', methods=['POST'])

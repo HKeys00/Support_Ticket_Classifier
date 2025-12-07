@@ -10,11 +10,7 @@ builder.AddServiceDefaults();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddHttpClient("Api", client =>
-{
-    client.BaseAddress = new Uri("https://localhost:7063/");
-});
-
+builder.Services.AddHttpClient("api");
 builder.Services.AddSingleton<ToastService>();
 builder.Services.AddScoped<CurrentTicketService>();
 builder.Services.AddScoped<TicketDragService>();
