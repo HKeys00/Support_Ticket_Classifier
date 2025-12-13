@@ -90,6 +90,7 @@ The model is created in the following kaggle notebook:
 - [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)
 - [x] Integrate with .NET Aspire
 - [ ] Implement Messaging Queues with either RabbitMQ or Azure Bus for background model retraining
+- [ ] Test reliablility with Simmy and Bombardier
 ---
 
 ### v1.3 – Enhancements
