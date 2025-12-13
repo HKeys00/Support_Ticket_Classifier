@@ -422,3 +422,4 @@ chromium/
 
 .env
 .venv/
+flask/

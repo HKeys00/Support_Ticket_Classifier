@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import shap
 from pathlib import Path
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder, FunctionTransformer
 from sklearn.model_selection import StratifiedShuffleSplit
@@ -10,13 +9,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import classification_report
 import joblib
-import matplotlib.pyplot as plt
 
 # ------------------------------------------------------
 # CONFIG
-DATASET_PATH = "./customer_support_tickets.csv"
+DATASET_PATH = "./model/customer_support_tickets.csv"
 MODEL_VERSION = "00001"
-MODEL_NAME = "./ticket_classifier_model"
+MODEL_NAME = "./model/ticket_classifier_model"
 MODEL_OUT = MODEL_VERSION + ".pkl"
 MODEL_PATH = Path(MODEL_NAME) / MODEL_OUT
 # ------------------------------------------------------
