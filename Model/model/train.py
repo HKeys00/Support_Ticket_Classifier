@@ -62,27 +62,24 @@ model = Pipeline([
 ])
 
 model.fit(x_train, y_train_encoded)
-predictions = model.predict(x_test)
+#predictions = model.predict(x_test)
 
-print(classification_report(y_test_encoded, predictions))
+#X_processed = model.named_steps["preprocessing"].transform(x_test).toarray()
 
+#explainer = shap.LinearExplainer(
+#    model.named_steps["clf"],
+#    X_processed,
+#    feature_perturbation="interventional"
+#)
+#shap_values = explainer(X_processed[:100])
 
-X_processed = model.named_steps["preprocessing"].transform(x_test).toarray()
+#print(type(model.named_steps["clf"]))
 
-explainer = shap.LinearExplainer(
-    model.named_steps["clf"],
-    X_processed,
-    feature_dependence="independent"
-)
-shap_values = explainer(X_processed[:100])
-
-print(type(model.named_steps["clf"]))
-
-shap.summary_plot(shap_values, X_processed)
-plt.show()
+#shap.summary_plot(shap_values, X_processed)
+#plt.show()
 
 
-#joblib.dump(model, MODEL_PATH)
+joblib.dump(model, MODEL_PATH)
 #joblib.dump(label_encoder, "label_encoder.pkl")
 
 
