@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-
+builder.AddRabbitMQClient(connectionName: "messaging");
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -23,6 +23,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddHostedService<StartupWorker>();
 builder.Services.AddTransient<UsageQuotaService>();
+builder.Services.AddTransient<UsageQuotaMiddleware>();
 
 var app = builder.Build();
 

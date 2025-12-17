@@ -1,13 +1,15 @@
 import sys
 import os
+import joblib
+import pandas as pd
+import pika
+import json
+from flask import Flask, request, jsonify
+from retrain import retrain_model
+
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../model')))
 
-from flask import Flask, request, jsonify
-from retrain import retrain_model
-import joblib
-import pandas as pd
-import os
 
 def squeeze_column(x):
     return x.squeeze()
@@ -36,9 +38,17 @@ def predict():
     "Confidence": class_confidence
     })
 
+def retrain(ch, method, properties, body):
+    print("RANNNNN")
+    message = json.loads(body.decode("utf-8"))
+    print("Received:", message)
+    # Do work here...
+    # If successful:
+    ch.basic_ack(delivery_tag=method.delivery_tag)
+    return
 
-@app.route('/retrain', methods=['POST'])
-def retrain():
+
+
     feedback = request.get_json(force=True)
     result = retrain_model(feedback, path)
 
@@ -54,3 +64,8 @@ def version():
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
 
+connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+channel = connection.channel()
+channel.queue_declare(queue='retrain_queue', durable=True)
+channel.basic_qos(prefetch_count=1)
+channel.basic_consume(queue='retrain_queue', on_message_callback=retrain)

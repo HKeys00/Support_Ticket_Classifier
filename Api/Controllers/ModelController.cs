@@ -7,6 +7,7 @@ using Shared.Enums.Ticket;
 using Shared.Models;
 using Shared;
 using System.Text.Json;
+using RabbitMQ.Client;
 
 namespace Api.Controllers
 {
@@ -28,6 +29,7 @@ namespace Api.Controllers
         #region Fields
 
         private readonly ILogger<ModelController> _logger;
+        private readonly IConnection _connection;
         private readonly IHttpClientFactory _clientFactory;
         private readonly ApplicationDbContext _context;
 
@@ -39,11 +41,17 @@ namespace Api.Controllers
         /// Initializes a new instance of the <see cref="ModelController"/> class.
         /// </summary>
         /// <param name="logger">The injected logger instance.</param>
+        /// <param name="connection">The injected rabbit mq connection.</param>
         /// <param name="clientFactory">The injected client factory instance.</param>
         /// <param name="context">The injected db context.</param>
-        public ModelController(ILogger<ModelController> logger, IHttpClientFactory clientFactory, ApplicationDbContext context)
+        public ModelController(
+            ILogger<ModelController> logger,
+            IConnection connection,
+            IHttpClientFactory clientFactory, 
+            ApplicationDbContext context)
         {
             _logger = logger;
+            _connection = connection;
             _clientFactory = clientFactory;
             _context = context;
         }
@@ -173,9 +181,11 @@ namespace Api.Controllers
             }
 
             corrections.ForEach(c => c.Ticket.Priority = (TicketPriority)c.CorrectedPriority);
-            
+
             var tickets = corrections.Select(c => TicketHelper.TicketToCorrectionDto(c.Ticket)).ToList();
-            using var client = _clientFactory.CreateClient();
+            using var channel = _connection.CreateModel();
+
+
 
             try
             {
