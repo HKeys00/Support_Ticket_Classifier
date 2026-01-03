@@ -8,7 +8,7 @@ var api = builder.AddProject<Projects.Api>("api")
     .WithReference(rabbit)
     .WaitFor(model);
 
-var client = builder.AddProject<Projects.Client>("client")
+builder.AddProject<Projects.Client>("client")
     .WithReference(api)
     .WaitFor(api);
 

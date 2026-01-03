@@ -12,7 +12,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddHttpClient("Api", client =>
 {
-    client.BaseAddress = new Uri("https://localhost:7063/");
+    client.BaseAddress = new Uri("https://api");
 });
 
 builder.Services.AddSingleton<ToastService>();

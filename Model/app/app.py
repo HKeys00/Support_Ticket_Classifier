@@ -5,7 +5,7 @@ import pandas as pd
 import pika
 import json
 from flask import Flask, request, jsonify
-from retrain import retrain_model
+#from retrain import retrain_model
 
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../model')))
@@ -46,8 +46,6 @@ def retrain(ch, method, properties, body):
     # If successful:
     ch.basic_ack(delivery_tag=method.delivery_tag)
     return
-
-
 
     feedback = request.get_json(force=True)
     result = retrain_model(feedback, path)

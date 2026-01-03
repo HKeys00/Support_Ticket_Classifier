@@ -86,9 +86,8 @@ namespace Client.Services
 
             try
             {
-                var response = await client.PostAsync(
-                    Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Retrain),
-                    null, cancellation);
+                var response = await client.PostAsync("model/retrain",
+                    new StringContent("AHH"), cancellation);
                 if (response.IsSuccessStatusCode)
                 {
                     return RetrainResult.FromSuccess();

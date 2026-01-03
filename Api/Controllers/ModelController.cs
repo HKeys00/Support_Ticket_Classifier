@@ -29,9 +29,7 @@ namespace Api.Controllers
         #region Fields
 
         private readonly ILogger<ModelController> _logger;
-        private readonly IConnection _connection;
         private readonly IHttpClientFactory _clientFactory;
-        private readonly ApplicationDbContext _context;
 
         #endregion
 
@@ -46,14 +44,10 @@ namespace Api.Controllers
         /// <param name="context">The injected db context.</param>
         public ModelController(
             ILogger<ModelController> logger,
-            IConnection connection,
-            IHttpClientFactory clientFactory, 
-            ApplicationDbContext context)
+            IHttpClientFactory clientFactory)
         {
             _logger = logger;
-            _connection = connection;
             _clientFactory = clientFactory;
-            _context = context;
         }
 
         #endregion
@@ -165,57 +159,67 @@ namespace Api.Controllers
         /// cancellation tokens
         /// </remarks>
         /// <param name="cancellation">The cancellation token.</param>
-        [HttpPost(ApiEndpoints.Model.Retrain)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<string>> RetrainModel(CancellationToken cancellation)
+        //[HttpPost(ApiEndpoints.Model.Retrain)]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public async Task<ActionResult<string>> RetrainModel(CancellationToken cancellation)
+        //{
+        //    var corrections = await _context.Corrections
+        //        .AsNoTracking()
+        //        .Include(c => c.Ticket)
+        //        .ToListAsync();
+
+        //    if (corrections.Count == 0)
+        //    {
+        //        return Ok("Success");
+        //    }
+
+        //    corrections.ForEach(c => c.Ticket.Priority = (TicketPriority)c.CorrectedPriority);
+
+        //    var tickets = corrections.Select(c => TicketHelper.TicketToCorrectionDto(c.Ticket)).ToList();
+        //    await using var channel = await _connection.CreateChannelAsync(null, cancellation);
+            
+        //    try
+        //    {
+        //        foreach (var ticket in tickets)
+        //        {
+        //            cancellation.ThrowIfCancellationRequested();
+        //            var body = JsonSerializer.Serialize(ticket);
+        //            await channel.BasicPublishAsync(string.Empty, "retrain_queue", true,
+        //                new BasicProperties(), System.Text.Encoding.UTF8.GetBytes(body), cancellation);
+
+        //            //var response = await client.PostAsJsonAsync("http://localhost:3000/retrain", ticket);
+        //            //var json = await response.Content.ReadAsStringAsync();
+
+        //            //if (!response.IsSuccessStatusCode)
+        //            //{
+        //            //    _logger.LogWarning("Model API returned error: {Status} - {Message}", response.StatusCode, json);
+        //            //    return StatusCode((int)response.StatusCode, json);
+        //            //}
+
+        //            _logger.LogInformation("Successfull retrained the model");
+        //        }
+
+        //        await _context.Corrections.ExecuteDeleteAsync(cancellation);
+        //        await _context.SaveChangesAsync();
+
+        //        return Ok();
+        //    } catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Error retraining model.");
+        //        return Problem(
+        //            detail: $"An unexpected error occured while retraining the model: {ex.Message}",
+        //            statusCode: StatusCodes.Status500InternalServerError);
+        //    }
+        //}
+
+        [HttpPost("model/retrain")]
+        public IActionResult Retrain()
         {
-            var corrections = await _context.Corrections
-                .AsNoTracking()
-                .Include(c => c.Ticket)
-                .ToListAsync();
-
-            if (corrections.Count == 0)
-            {
-                return Ok("Success");
-            }
-
-            corrections.ForEach(c => c.Ticket.Priority = (TicketPriority)c.CorrectedPriority);
-
-            var tickets = corrections.Select(c => TicketHelper.TicketToCorrectionDto(c.Ticket)).ToList();
-            using var channel = _connection.CreateModel();
-
-
-
-            try
-            {
-                foreach (var ticket in tickets)
-                {
-                    cancellation.ThrowIfCancellationRequested();
-                    var response = await client.PostAsJsonAsync("http://localhost:3000/retrain", ticket);
-                    var json = await response.Content.ReadAsStringAsync();
-
-                    if (!response.IsSuccessStatusCode)
-                    {
-                        _logger.LogWarning("Model API returned error: {Status} - {Message}", response.StatusCode, json);
-                        return StatusCode((int)response.StatusCode, json);
-                    }
-
-                    _logger.LogInformation("Successfull retrained the model");
-                }
-
-                await _context.Corrections.ExecuteDeleteAsync(cancellation);
-                await _context.SaveChangesAsync();
-
-                return Ok();
-            } catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retraining model.");
-                return Problem(
-                    detail: $"An unexpected error occured while retraining the model: {ex.Message}",
-                    statusCode: StatusCodes.Status500InternalServerError);
-            }
+            Console.WriteLine("POST /model/retrain hit!");
+            return Ok("Retrain received");
         }
+
 
         #endregion
     }
