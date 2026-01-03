@@ -87,7 +87,7 @@ namespace Client.Services
             try
             {
                 var response = await client.PostAsync("model/retrain",
-                    new StringContent("AHH"), cancellation);
+                    null, cancellation);
                 if (response.IsSuccessStatusCode)
                 {
                     return RetrainResult.FromSuccess();

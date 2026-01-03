@@ -1,6 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var model = builder.AddPythonApp("model", "../../Model", "./app/app.py");
+var model = builder.AddPythonApp("ml-model", "../../Model", "./app/app.py");
 var rabbit = builder.AddRabbitMQ("messaging");
 
 var api = builder.AddProject<Projects.Api>("api")
