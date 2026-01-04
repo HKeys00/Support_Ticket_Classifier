@@ -29,9 +29,12 @@ var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-app.UseMiddleware<UsageQuotaMiddleware>();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
+{
+    app.UseMiddleware<UsageQuotaMiddleware>();
+}
+else
 {
     app.MapOpenApi();
     app.UseSwagger();

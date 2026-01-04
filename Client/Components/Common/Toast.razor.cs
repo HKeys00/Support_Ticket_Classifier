@@ -57,7 +57,7 @@ namespace Client.Components.Common
         }
 
         /// <summary>
-        /// Removes thje toast from the UI.
+        /// Removes the toast from the UI.
         /// </summary>
         /// <param name="toast">The toast to remove.</param>
         private void RemoveToast(ToastMessage toast)

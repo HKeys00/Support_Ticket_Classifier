@@ -82,12 +82,12 @@ namespace Client.Services
         /// <returns>The result of the retrain request.</returns>
         public async Task<RetrainResult> RetrainModel(CancellationToken cancellation)
         {
-            using var client = _clientFactory.CreateClient(ApiEndpoints.Client);
+            using var client = _clientFactory.CreateClient(ApiEndpoints.LongRunningClient);
 
             try
             {
-                var response = await client.PostAsync("model/retrain",
-                    null, cancellation);
+                var response = await client.PostAsync(Path.Combine(ApiEndpoints.Model.Endpoint, ApiEndpoints.Model.Retrain), null, cancellation);
+                
                 if (response.IsSuccessStatusCode)
                 {
                     return RetrainResult.FromSuccess();

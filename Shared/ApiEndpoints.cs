@@ -6,6 +6,7 @@
     public static class ApiEndpoints
     {
         public const string Client = "Api";
+        public const string LongRunningClient = "Long-Running-Api";
 
         /// <summary>
         /// The endpoints for the model controller.
