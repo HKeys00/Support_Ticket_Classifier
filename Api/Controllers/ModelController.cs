@@ -8,6 +8,7 @@ using Shared.Models;
 using Shared;
 using System.Text.Json;
 using RabbitMQ.Client;
+using System.Text;
 
 namespace Api.Controllers
 {
@@ -191,8 +192,24 @@ namespace Api.Controllers
                 {
                     cancellation.ThrowIfCancellationRequested();
                     var body = JsonSerializer.Serialize(ticket);
-                    await channel.BasicPublishAsync(string.Empty, "retrain_queue", true,
-                        new BasicProperties(), System.Text.Encoding.UTF8.GetBytes(body), cancellation);
+                    var props = new BasicProperties
+                    {
+                        DeliveryMode = DeliveryModes.Persistent
+                    };
+                    await channel.QueueDeclareAsync(
+                        queue: "retrain_queue",
+                        durable: true,
+                        exclusive: false,
+                        autoDelete: false
+                    );
+                    await channel.BasicPublishAsync(
+                        "",
+                        "retrain_queue",
+                        false,
+                        props,
+                        Encoding.UTF8.GetBytes(body),
+                        cancellation
+                    );
 
                     //var response = await client.PostAsJsonAsync("http://localhost:3000/retrain", ticket);
                     //var json = await response.Content.ReadAsStringAsync();
