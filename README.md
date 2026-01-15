@@ -84,7 +84,7 @@ The model is created in the following kaggle notebook:
 ### v1.2 – Production Ready (DevOps + Reliability)
 - [ ] Deploy app + DB to Azure App Service + Azure SQL  
 - [ ] Set up CI/CD pipeline (GitHub Actions or Azure DevOps)  
-- [ ] Seed DB with realistic fake tickets for demo  
+- [x] Seed DB with realistic fake tickets for demo  
 - [ ] Enable monitoring/logging with Azure Application Insights  
 - [ ] Add audit trail (ticket history: who changed priority, when, old → new)  
 - [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)
