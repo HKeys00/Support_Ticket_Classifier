@@ -1,7 +1,10 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-var model = builder.AddPythonApp("ml-model", "../../Model", "./app/app.py");
+
 var rabbit = builder.AddRabbitMQ("messaging");
+var model = builder.AddPythonApp("ml-model", "../../Model", "./app/app.py")
+    .WithReference(rabbit)
+    .WaitFor(rabbit);
 
 var api = builder.AddProject<Projects.Api>("api")
     .WithReference(model)

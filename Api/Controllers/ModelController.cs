@@ -191,17 +191,20 @@ namespace Api.Controllers
                 foreach (var ticket in tickets)
                 {
                     cancellation.ThrowIfCancellationRequested();
+                    
                     var body = JsonSerializer.Serialize(ticket);
                     var props = new BasicProperties
                     {
                         DeliveryMode = DeliveryModes.Persistent
                     };
+
                     await channel.QueueDeclareAsync(
                         queue: "retrain_queue",
                         durable: true,
                         exclusive: false,
                         autoDelete: false
                     );
+
                     await channel.BasicPublishAsync(
                         "",
                         "retrain_queue",
@@ -211,16 +214,7 @@ namespace Api.Controllers
                         cancellation
                     );
 
-                    //var response = await client.PostAsJsonAsync("http://localhost:3000/retrain", ticket);
-                    //var json = await response.Content.ReadAsStringAsync();
-
-                    //if (!response.IsSuccessStatusCode)
-                    //{
-                    //    _logger.LogWarning("Model API returned error: {Status} - {Message}", response.StatusCode, json);
-                    //    return StatusCode((int)response.StatusCode, json);
-                    //}
-
-                    _logger.LogInformation("Successfull retrained the model");
+                    _logger.LogInformation("Successfully retrained the model");
                 }
 
                 await _context.Corrections.ExecuteDeleteAsync(cancellation);
