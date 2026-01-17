@@ -91,6 +91,12 @@ namespace Shared.Models
         /// Gets or sets the resolution or solution provided for the ticket.
         /// </summary>
         public string? Resolution { get; set; }
+
+        /// <summary>
+        /// Gets or sets the concurrency token.
+        /// </summary>
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.

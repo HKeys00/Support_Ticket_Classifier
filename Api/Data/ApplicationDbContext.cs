@@ -43,5 +43,15 @@ namespace Api.Data
         }
 
         #endregion
+
+        #region Methods
+
+        /// <inheritdoc />
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Ticket>().Property(t => t.RowVersion).IsRowVersion();
+        }
+
+        #endregion
     }
 }

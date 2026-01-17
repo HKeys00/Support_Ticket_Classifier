@@ -186,6 +186,13 @@ namespace Api.Controllers
             var tickets = corrections.Select(c => c.Ticket.TicketToCorrectionDto()).ToList();
             await using var channel = await _connection.CreateChannelAsync(null, cancellation);
 
+            await channel.QueueDeclareAsync(
+                queue: "retrain_queue",
+                durable: true,
+                exclusive: false,
+                autoDelete: false
+            );
+
             try
             {
                 foreach (var ticket in tickets)
@@ -197,13 +204,6 @@ namespace Api.Controllers
                     {
                         DeliveryMode = DeliveryModes.Persistent
                     };
-
-                    await channel.QueueDeclareAsync(
-                        queue: "retrain_queue",
-                        durable: true,
-                        exclusive: false,
-                        autoDelete: false
-                    );
 
                     await channel.BasicPublishAsync(
                         "",
