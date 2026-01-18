@@ -89,7 +89,7 @@ The model is created in the following kaggle notebook:
 - [ ] Add audit trail (ticket history: who changed priority, when, old → new)  
 - [ ] Add concurrency handling in EF Core (optimistic concurrency tokens)
 - [x] Integrate with .NET Aspire
-- [ ] Implement Messaging Queues with either RabbitMQ or Azure Bus for background model retraining
+- [x] Implement Messaging Queues with either RabbitMQ or Azure Bus for background model retraining
 - [ ] Test reliablility with Simmy and Bombardier
 ---
 
